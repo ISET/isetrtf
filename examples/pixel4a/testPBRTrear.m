@@ -1,0 +1,49 @@
+%% Pixel 4 Front camera PBRT test
+% 2022 Thomas Goossens
+
+clear
+ieInit
+if ~piDockerExists, piDockerConfig; end
+
+%% Load PBRT recipe of the chess set scene
+thisR=piRecipeDefault('scene','ChessSet')
+thisDocker = 'vistalab/pbrt-v3-spectral:raytransfer-ellipse';
+
+
+%% Set camera position
+% Set camera and camera position
+filmZPos_m           = -0.9;
+thisR.lookAt.from(3)= filmZPos_m;
+
+
+%% Make an example rendered scene with the RTF lens of the pixel4a rear camera
+
+filmdistance_mm=0.464135918+0.01;
+pixelpitch_mm=1.4e-3;
+sensordiagonal_mm=3.5;
+
+%% Render chessset scene with the ray transfer function
+
+% RTF camera 
+cameraRTF = piCameraCreate('raytransfer','lensfile','pixel4a-rearcamera-ellipse-raytransfer.json');
+cameraRTF.filmdistance.value=filmdistance_mm/1000;
+
+thisR.set('pixel samples',32);
+thisR.set('film diagonal',sensordiagonal_mm/2,'mm');
+thisR.set('film resolution',[300 300])
+
+% Path integrated, only simulate for one wavelength
+thisR.integrator.subtype='path'
+thisR.integrator.numCABands.type = 'integer';
+thisR.integrator.numCABands.value =1
+
+% Write PBRT File
+thisR.set('camera',cameraRTF);
+piWrite(thisR);
+
+% Render PBRT file
+[oi,result] = piRender(thisR,'render type','radiance','dockerimagename',thisDocker);
+
+% Show end result
+oiWindow(oi)
+    

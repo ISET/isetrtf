@@ -1,0 +1,15 @@
+
+%%
+
+path = 'dgauss.22deg.50.0mm_aperture6.0.json'
+[binsLens,countsLens]=receptiveFieldRTF('isetlens',path,36.959,3000,'imageheight',5);
+
+%%
+path = fullfile(piRootPath,'data/lens/','dgauss.22deg.50.0mm_aperture6.0-diaphragm7mm-raytransfer.json')
+[binsRTF,countsRTF]=receptiveFieldRTF('rtf',path,36.959,3000,'imageheight',5);
+
+
+%% Comparison
+for i=1:2
+    plot(binsRTF(:,i),countsRTF)
+end
