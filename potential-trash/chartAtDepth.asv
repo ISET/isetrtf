@@ -1,0 +1,110 @@
+%% Script with charts at different depths 
+% This script is written as part of a class project on autofocus  psych221
+% For Itamar
+%
+% The aim is to generate a scene with objects at controllable depths
+% Supervised by Thomas Goossens
+
+ieInit;
+
+
+
+%% Filmdistance and 
+lens=lensC('file','tessar-zemax.json')
+filmdistance_mm=100 % mm
+
+% Positions of chart as measured from the film
+distancesFromFilm_meter = (100+16.4)/1000+[2 1.267384 1.8 2 3  ]
+distancesFromFilm_meter = (100+16.4)/1000+[2 1.267384 3 4 1.5]
+distancesFromFilm_meter = (100+16.4)/1000+[2 1.267384]
+
+
+%% Create the two cameras and choose a lens
+lensname='tessar-zemax'
+cameraOmni = piCameraCreate('omni','lensfile',[lensname '.json']);
+cameraOmni.filmdistance.type='float';
+cameraOmni.filmdistance.value=filmdistance_mm/1000;
+cameraOmni = rmfield(cameraOmni,'focusdistance');
+cameraOmni.aperturediameter.value=2*8.111;
+%cameraOmni.aperturediameter.value=8.111;
+
+cameras = {cameraOmni}; oiLabels = {'cameraOmni'};
+
+
+%% Create the two cameras and choose a lens
+
+for degree=[2 4 6 9 12]
+lensname=['tessar-moredata-zemax-poly' num2str(degree) '-raytransfer']
+cameraRTF = piCameraCreate('raytransfer','lensfile',[lensname '.json']);
+cameraRTF.filmdistance.type='float';
+cameraRTF.filmdistance.value=(filmdistance_mm+0.01)/1000;
+cameras{end+1} = cameraRTF;
+end
+
+
+
+
+
+%% Loop over different chart distances, as measured from film
+for c=1:numel(cameras)
+for i=1:numel(distancesFromFilm_meter)
+
+    
+    % Build the scene
+    thisR=piRecipeDefault('scene name','flatsurface');
+    
+    % Add chart at depth
+    positionXY = [0 0];% Center
+    scaleFactor=0.5; % adjust to your liking
+    piChartAddatDistanceFromFilm(thisR,distancesFromFilm_meter(i),positionXY,scaleFactor);
+        
+    thisR.set('camera',cameras{c});
+    thisR.set('spatial resolution',[50000 1]);
+    thisR.set('rays per pixel',400);
+    thisR.set('film diagonal',50.5); % Original
+    
+    
+    % Write and render
+    piWrite(thisR);
+    [oi log] = piRender(thisR,'render type','radiance');
+    oi.name=['Chart distance from film: ' num2str(distancesFromFilm_meter(i))]
+    oiList{c,i}=oi;
+    oiWindow(oi)
+end
+
+end
+%% Compare edge smoothing at different depths
+
+pause(1)
+load lsf.mat
+color=hot;
+filmWidth=oiGet(oi,'width','mm');
+pixels = 1e3*linspace(-filmWidth/2,filmWidth/2,oiGet(oi,'cols'))
+smooth = @(x)conv(x,[1 1 1 1 1]/5,'same' )
+figure(5);clf; hold on
+for i=1:numel(distancesFromFilm_meter)
+    %subplot(2,3,i);hold on
+    subplot(5,2,i);hold on
+   
+   % Omni
+    oi=oiList{1,i} ;   edge=oi.data.photons(end,:,1); % Take horizontal line in center
+   plot(pixels,edge/max(smooth(edge)),'color',color(35*i,:))
+   
+   % RTF
+   for d=1:(size(oiList,1)-1)
+    subplot(5,2,i+(d-1)*2);hold on
+    oi=oiList{1+d,i} ;   edge=oi.data.photons(end,:,1); % Take horizontal line in center
+    plot(pixels,edge/max(smooth(edge)),'color',color(1*i,:))
+   
+   
+   % LSF zemax
+   lsfi=lsf{i};
+   plot(flip(lsfi(:,1)),lsfi(:,3),'color',color(35*i,:),'linestyle',':','linewidth',2)
+   labels{i}=[num2str(distancesFromFilm_meter(i)) ' m'];
+   title([num2str(distancesFromFilm_meter(i)) ' m']);
+   xlabel('micron')
+   xlim([-500 500])
+   end
+end
+%legend(labels)
+
