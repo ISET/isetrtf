@@ -2,7 +2,7 @@ function [arrivalPosOnOutputPlane,arrivalDirection,arrivalPosOnOutSurface] = rtf
 % Step 1: Define rotation matrix
 alpha=atan2d(origin(2),origin(1));
 
-a= 90 - alpha;  % WHY
+a= 90 - alpha; 
 
 rot = [cosd(a) -sind(a);
        sind(a)  cosd(a)]; 

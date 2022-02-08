@@ -11,7 +11,8 @@ function [radius,sensitivity] = findCuttingCircleEdge(points,offaxis_distances,s
 %
 %
 %  INPUTS
-%      points - 2xPxN  (X,Y) x  (pupil positions)  x points
+%      points - 2xPxN  (X,Y) x  (input plane positions)  x samples on ray
+%                   pass plane
 %      offaxis_distances - 1xP   radial off-axis distances
 %
 %      Varargin:

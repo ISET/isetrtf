@@ -31,6 +31,34 @@ polynomialDegrees{end+1}=[1:7];
 
 %%
 
+%%%% Petzval
+lensName{end+1}='petzval-zemax'
+%zemaxDataFile{end+1}='./data/zemaxraytrace/petzval-primaryWL1.txt';
+zemaxDataFile{end+1}='./data/zemaxraytrace/petzval_primarywl1.txt';
+
+offset_sensorside{end+1}=0.01;
+offset_objectside{end+1}=0.01; %%mm
+lensThickness{end+1}=143.88312;
+disable_dz_polynomial{end+1}=true;
+%$polynomialDegrees{end+1}=[1:8];  
+polynomialDegrees{end+1}=[4 8];  
+
+
+%%
+
+%%%% Petzval 5mm planes
+lensName{end+1}='petzval-zemax'
+%zemaxDataFile{end+1}='./data/zemaxraytrace/petzval-primaryWL1.txt';
+zemaxDataFile{end+1}='./data/zemaxraytrace/petzval_primarywl1_5mminput.txt';
+
+offset_sensorside{end+1}=5;
+offset_objectside{end+1}=5; %%mm
+lensThickness{end+1}=143.88312;
+disable_dz_polynomial{end+1}=true;
+%$polynomialDegrees{end+1}=[1:8];  
+polynomialDegrees{end+1}=[8];  
+%%
+
 %%% Tessar lens
 lensName{end+1}='tessar-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/tessar-rayaim-novignetfactors.txt';
@@ -50,27 +78,20 @@ lensThickness{end+1}=17.96897;
 disable_dz_polynomial{end+1}=true;
 polynomialDegrees{end+1}=[1:12];  
 
-%%%% Petzval
-lensName{end+1}='petzval-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/petzval-primaryWL1.txt';
-offset_sensorside{end+1}=0.01;
-offset_objectside{end+1}=0.01; %%mm
-lensThickness{end+1}=143.8312;
-disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:8];  
 
 
-%%% Inversetelephoto
+
+%% Inversetelephoto
 lensName{end+1}='inversetelephoto-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/inversetelephoto.txt';
+zemaxDataFile{end+1}='./data/zemaxraytrace/inversetelephoto_primarywl1.txt';
 offset_sensorside{end+1}=0.1;
 offset_objectside{end+1}=0.1; %%mm
 lensThickness{end+1}=1.30140;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:8];  
+polynomialDegrees{end+1}=[1:12];  
 
 
-%%%% Double gauss 28deg lens 
+%% Double gauss 28deg lens 
 lensName{end+1}='dgauss28deg-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg.txt';
 offset_sensorside{end+1}=0.01;
@@ -128,7 +149,7 @@ for i=1:numel(lensName)
         rtfName = [lensName{i} '-poly' num2str(polyDeg) '-raytransfer'];
         disp(['RTF Generation: ' rtfName])
         rtf=generateRTFfromIO(lensName{i},rtfName,iRays,oRays,offset_sensorside{i},offset_objectside{i},lensThickness{i},...
-            'outputdir',outputDir,'visualize',false,'polynomialdegree',polyDeg,...
+            'outputdir',outputDir,'visualize',true,'polynomialdegree',polyDeg,...
             'intersectionplanedistance',17);
         % Intersection plane sdistance  is the distance fron the input
         % plane to the plane where the raypass function (ellipses) are

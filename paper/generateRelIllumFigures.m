@@ -4,6 +4,8 @@
 % Thomas Goossens
 
 clear; close all
+
+
 config={};
 
 %% Lens configurations
@@ -22,22 +24,23 @@ config{i}.sensordiagonal_mm=1.5*2;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
 config{i}.polydegree=6;
-
+%% 
 i=numel(config)+1;
 config{i}.name='petzval';
-config{i}.filmdistance_mm=20;
-config{i}.sensordiagonal_mm=25*2;
+config{i}.filmdistance_mm=15.196;
+%config{i}.filmdistance_mm=02;
+config{i}.sensordiagonal_mm=35*2;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
-config{i}.polydegree=8;
-
+config{i}.polydegree=8
+%% 
 i=numel(config)+1;
 config{i}.name= 'cooke40deg';
 config{i}.filmdistance_mm=50;
 config{i}.sensordiagonal_mm=42*2;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
-config{i}.polydegree=6;
+config{i}.polydegree=8;
 
 i=numel(config)+1;
 config{i}.name= 'tessar'; 
@@ -64,6 +67,7 @@ c=config{p}
 
 
 thisR=piRecipeDefault('scene','flatSurface'); 
+
 % Set Light that is all around the world, so do not depend on the size of the target
 % This is especially important for wide angle lenses
 thisR.set('light','#1_Light_type:point','type','infinite'); 
@@ -72,10 +76,19 @@ thisDocker = 'vistalab/pbrt-v3-spectral:raytransfer-ellipse';
 
 
  filename=[c.name '-zemax-poly' num2str(c.polydegree) '-raytransfer.json']
+ filename=[c.name '-zemax-poly' num2str(c.polydegree) '-circles-raytransfer.json']
 
     cameraRTF = piCameraCreate('raytransfer','lensfile',filename);
     cameraRTF.filmdistance.value=c.filmdistance_mm/1000;
     thisR.set('camera',cameraRTF);
+
+%     cameraOmni = piCameraCreate('omni','lensfile','petzval-zemax.json');
+%      cameraOmni.filmdistance.value=c.filmdistance_mm/1000;
+%      cameraOmni.filmdistance.type='float';
+%      cameraOmni = rmfield(cameraOmni,'focusdistance');
+%      cameraOmni.aperturediameter.value=28*2;
+%      cameraOmni.aperturediameter.type='float';
+%      thisR.set('camera',cameraOmni);    
 
     thisR.set('pixel samples',c.pixelsamples);
     thisR.set('film diagonal',c.sensordiagonal_mm,'mm');
@@ -92,7 +105,7 @@ thisDocker = 'vistalab/pbrt-v3-spectral:raytransfer-ellipse';
     
     [oiTemp,result] = piRender(thisR,'render type','radiance','dockerimagename',thisDocker);
     oiTemp.name=c.name;
-    oi{p} =oiTemp;
+        oi{p} =oiTemp;
     
 end
 
@@ -100,7 +113,7 @@ end
 
 
 
-%% Each lens separate figure
+%% Generate a relative illumination plot for each lens
 colors = hot;
 for p=1:numel(config)
     c=config{p};

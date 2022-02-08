@@ -21,12 +21,12 @@ config={};
 config{end+1}=[]
 config{end}.rtfname='petzval-zemax';
 config{end}.distances = [3000 3500];
-config{end}.scalefactors=[0.01 0.3]/1.5
+config{end}.scalefactors=[0.03 0.3]/1.5
 config{end}.filmdistance_mm=18.667;
-config{end}.filmdiagonal_mm=2*30/100;
-config{end}.degrees=[1 12];
+config{end}.filmdiagonal_mm=2*45/100;
+config{end}.degrees=[1:12];
 config{end}.rays=5000;
-config{end}.resolution=1000;
+config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
 
 
@@ -34,12 +34,12 @@ config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
 config{end+1}=[]
 config{end}.rtfname='inversetelephoto-zemax';
 config{end}.distances = [3000 40];
-config{end}.scalefactors=[0.05 0.2]
+config{end}.scalefactors=[0.04 0.2]
 config{end}.filmdistance_mm=1.195;
-config{end}.filmdiagonal_mm=2*1/100;
-config{end}.degrees=[1:8];
-config{end}.rays=2000;
-config{end}.resolution=2000;
+config{end}.filmdiagonal_mm=2*2/100;
+config{end}.degrees=[1:12];
+config{end}.rays=5000;
+config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-inversetelephoto.mat';
 
 %%
@@ -147,6 +147,8 @@ end
 
 for i=1:numel(config)
     c=config{i};
+    
+    
     disp(['Generate ESF Plots for ' c.rtfname])
 
     % Load Zemax ESF File

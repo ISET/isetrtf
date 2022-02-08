@@ -172,7 +172,7 @@ circlePlaneZ=inputplane_z+   entrancepupil_distance;
  z= circlePlaneZ*[1 1 1 1 1];
 hplane=plot3(x, y, z, 'k');
 
-htext=text(5,-10,circlePlaneZ,'Plane of intersection') 
+htext=text(5,-10,circlePlaneZ,'Ray Pass Plane') 
  
 % Draw Input plane
  planeSide=24;
@@ -212,7 +212,7 @@ xlim([-24 24])
 ylim([-24 24])
 legh=legend([htrace hvignet],'Rays that reach sensor','Rays that do not pass')
 legh.Box='off'
-legh.Position=[[0.5690 0.5000 0.3250 0.0821]];
+legh.Position=[0.4486 0.7819 0.4122 0.0945];
 
 ax=gca;
 ax.XAxis.Visible='off'
@@ -227,6 +227,83 @@ exportgraphics(gca,'./fig/visualizePlaneIntersection.eps')
 
 
 %%
+
+%% Visualisze traces Horizontal
+circlePlaneZ=inputplane_z+   entrancepupil_distance;
+ p=10
+ Ptrace=pupilshape_trace(1:3,p,:);
+ Pvignet=pupilshape_vignetted(1:3,p,:);
+ 
+ figure(1);clf
+ hold on;
+
+
+ 
+% Draw Circle plane
+ planeSide=24;
+ x=planeSide*[-1 1 1 -1 -1];
+ y=planeSide*[-1 -1 1 1 -1];
+ z= circlePlaneZ*[1 1 1 1 1];
+hplane=plot3(z,y ,x, 'k');
+
+htextraypass=text(-15.8334, -16.7951 ,-11.0068,'Ray Pass Plane') 
+ 
+% Draw Input plane
+ planeSide=24;
+ x=planeSide*[-1 1 1 -1 -1];
+ y=planeSide*[-1 -1 1 1 -1];
+ z= inputplane_z*[1 1 1 1 1];
+hplane=plot3(z, y, x, 'k');
+
+
+%htext=text(10,-10,inputplane_z,'Input plane') 
+ 
+ % Draw Scatter plot of intersections on input plane
+ htrace=scatter3(Ptrace(3,:),Ptrace(2,:),Ptrace(1,:),'.');
+ htrace.CData=[0    0.4470    0.7410];
+ htrace.CData = colorpass;
+ hvignet=scatter3(Pvignet(3,:),Pvignet(2,:),Pvignet(1,:),'.');
+ hvignet.CData=[0.9 0.4 0.4]
+ hvignet.CData = colornopass;
+
+ % Label origin
+ origin=[0;positions(p);inputplane_z];
+ htext=text(-38,6,5,'Point on input plane')
+ 
+% Draw a   subset of rays for visual effect
+for c=1:1:size(Ptrace,3)
+ line([origin(3) Ptrace(3,c)],[origin(2) Ptrace(2,c)],[origin(1) Ptrace(1,c)],'color',htrace.CData)
+end 
+   
+for c=1:20:size(Pvignet,3)
+ line([origin(3) Pvignet(3,c)],[origin(2) Pvignet(2,c)],[origin(1) Pvignet(1,c)],'color',hvignet.CData)
+end 
+
+% Fake data point for larger markers
+ htrace=scatter3(NaN,NaN,NaN,200,'filled');
+  htrace.CData = colorpass;
+ hvignet=scatter3(NaN,NaN,NaN,200,'filled');
+  hvignet.CData = colornopass;
+ %view(-27,18)
+ view(27,18)
+ 
+zlim([-24 24])
+ylim([-24 24])
+
+
+
+legh=legend([htrace hvignet],'Rays that pass through lens','Rays that do not pass')
+legh.Box='off'
+legh.Position=[0.4397 0.7748 0.4122 0.0945];
+
+ax=gca;
+ax.XAxis.Visible='off'
+ax.YAxis.Visible='off'
+ax.ZAxis.Visible='off'
+set(findall(gcf,'-property','FontSize'),'FontSize',11);
+set(findall(gcf,'-property','interpreter'),'interpreter','latex');
+exportgraphics(gca,'./fig/visualizePlaneIntersection.eps')
+%exportgraphics(gca,'./fig/visualizeVignetCircleMethod.png')
 
 
 

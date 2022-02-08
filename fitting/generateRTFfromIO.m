@@ -84,7 +84,7 @@ for p=1:numel(positions)
     %scatter(pupil(1,:),pupil(2,:),'r+')
     title(positions(p));
     
-    axis equal
+    %axis equal
     
 end
 
