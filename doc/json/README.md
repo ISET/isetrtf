@@ -4,6 +4,8 @@
 </div>
 
 # Ray Pass Functions
+There are different kinds of ray pass functions. Two are described below.
+The type of ray pass function is specified using the *method* field.
 ## Ellipses
 *Positions*: The off-axis distances on the input plane at which the ray pass function was determined
 *Intersectionplanedistance*: The distance of the ellipses above the input plane.
