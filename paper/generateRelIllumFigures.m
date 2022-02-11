@@ -33,6 +33,17 @@ config{i}.sensordiagonal_mm=35*2;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
 config{i}.polydegree=8
+
+%% 
+i=numel(config)+1;
+config{i}.name='petzval-5mminput';
+config{i}.filmdistance_mm=15.196;
+%config{i}.filmdistance_mm=02;
+config{i}.sensordiagonal_mm=35*2;
+config{i}.pixelsamples=2000;
+config{i}.filmresolution=[900 1];
+config{i}.polydegree=8
+
 %% 
 i=numel(config)+1;
 config{i}.name= 'cooke40deg';
@@ -50,7 +61,7 @@ config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
 config{i}.polydegree=6;
 
-
+%%
 
 i=numel(config)+1;
 config{i}.name='wideangle200deg-circle';
@@ -58,7 +69,7 @@ config{i}.filmdistance_mm=2.003+0.0005;   %% Add offset to avoid issue with film
 config{i}.sensordiagonal_mm=5;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[300 1];
-config{i}.polydegree=8;
+config{i}.polydegree=7;
 %% Add a lens and render.
 
 for p=1:numel(config)
@@ -76,7 +87,7 @@ thisDocker = 'vistalab/pbrt-v3-spectral:raytransfer-ellipse';
 
 
  filename=[c.name '-zemax-poly' num2str(c.polydegree) '-raytransfer.json']
- filename=[c.name '-zemax-poly' num2str(c.polydegree) '-circles-raytransfer.json']
+ %filename=[c.name '-zemax-poly' num2str(c.polydegree) '-circles-raytransfer.json']
 
     cameraRTF = piCameraCreate('raytransfer','lensfile',filename);
     cameraRTF.filmdistance.value=c.filmdistance_mm/1000;

@@ -128,8 +128,12 @@ intersectionPlaneDistance=17 % Some arbitrary distance to choose for the interse
 
 %% Color style
 colors=hot;
-colornopass = colors(70,:);
-colorpass = colors(160,:);
+%colornopass = colors(70,:);
+%colorpass = colors(160,:);
+
+colornopass = [1 1 1]*0.9;
+%colorpass = colors(160,:);
+colorpass = [0 49 90]/100;    
 
 %% Visualize how the radii and centers changes with the position on the input plane
 figure;
@@ -164,7 +168,7 @@ for p=1:numel(pselection)
     theta = linspace(0,2*pi,200);
     ps=pselection(p);
     ellipse=centers(:,ps)+radii(:,ps).*[sin(theta);cos(theta)];
-    hellipse=plot(ellipse(1,:),ellipse(2,:),'k','linewidth',2,'linestyle','--')
+    hellipse=plot(ellipse(1,:),ellipse(2,:),'color',0*[1 1 1],'linewidth',3,'linestyle','-')
     
     
     % Choose the boundaries of the axes to  so that the circle is always

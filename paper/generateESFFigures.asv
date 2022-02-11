@@ -34,17 +34,17 @@ config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
 %%
 
 
-% 
-% config{end+1}=[]
-% config{end}.rtfname='petzval-zemax';
-% config{end}.distances = [3000 3500];
-% config{end}.scalefactors=[0.03 0.3]/1.5
-% config{end}.filmdistance_mm=18.667;
-% config{end}.filmdiagonal_mm=2*45/100;
-% config{end}.degrees=[1:12];
-% config{end}.rays=5000;
-% config{end}.resolution=4000;
-% config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
+
+config{end+1}=[]
+config{end}.rtfname='petzval-zemax';
+config{end}.distances = [3000 3500];
+config{end}.scalefactors=[0.03 0.3]/1.5
+config{end}.filmdistance_mm=18.667;
+config{end}.filmdiagonal_mm=2*45/100;
+config{end}.degrees=[1:12];
+config{end}.rays=5000;
+config{end}.resolution=4000;
+config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
 
 
 %%
@@ -94,10 +94,10 @@ config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the
 config{end+1}=[]
 config{end}.rtfname='tessar-zemax';
 config{end}.distances = [1267.384 2000]
-config{end}.scalefactors=[0.1 0.2]
+config{end}.scalefactors=[0.1 0.13]
 config{end}.filmdistance_mm=100;
 config{end}.filmdiagonal_mm=2*50.5/100;
-config{end}.degrees=[1:16];
+config{end}.degrees=[1 16];
 config{end}.rays=2000;
 config{end}.resolution=1000;
 config{end}.zemaxfileESF='data/ESF/esf-tessar.mat';
@@ -120,11 +120,11 @@ config{end}.zemaxfileESF='data/ESF/esf-cooke40deg.mat';
 
 
 
-%% Calculate ESF
+%% Generate ESF
 for i=1:numel(config)
     c=config{i};
     disp(['Generate ESF for ' c.rtfname])
-    [esf,pixels,noisefloorTemp]=calculateESF('rtfName',c.rtfname,'distances',c.distances,...
+    [esf,pixels,noisefloorTemp]=generateESF('rtfName',c.rtfname,'distances',c.distances,...
         'scalefactors',c.scalefactors,'filmdistance',c.filmdistance_mm,'filmdiagonal',c.filmdiagonal_mm,...
         'rays',c.rays,'degrees',c.degrees,'resolution',c.resolution);
 
@@ -184,8 +184,8 @@ for i=1:numel(config)
         text(220,0.9,'Zemax')
     end
     plotESF(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},esfZemax)
-    %if(i==4)        xlim([-100 100]),    end
-    if(i==6)        xlim([-800 800]),    end
+    if(i==4)        xlim([-100 100]),    end
+    if(i==6)        xlim([-50 50]),    end
     exportgraphics(gcf,['./fig/ESF/esf-' c.rtfname '.pdf'])
     
   

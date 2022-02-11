@@ -151,82 +151,10 @@ positions =[0    1.0000    2.0000    3.0000    4.0000    5.0000    6.0000    7.0
     
 %% Colors
 colors=hot;
-colornopass = colors(70,:);
-colorpass = colors(160,:);
-    
- %% Visualisze traces
-circlePlaneZ=inputplane_z+   entrancepupil_distance;
- p=10
- Ptrace=pupilshape_trace(1:3,p,:);
- Pvignet=pupilshape_vignetted(1:3,p,:);
- 
- figure(1);clf
- hold on;
 
-
- 
-% Draw Circle plane
- planeSide=24;
- x=planeSide*[-1 1 1 -1 -1];
- y=planeSide*[-1 -1 1 1 -1];
- z= circlePlaneZ*[1 1 1 1 1];
-hplane=plot3(x, y, z, 'k');
-
-htext=text(5,-10,circlePlaneZ,'Ray Pass Plane') 
- 
-% Draw Input plane
- planeSide=24;
- x=planeSide*[-1 1 1 -1 -1];
- y=planeSide*[-1 -1 1 1 -1];
- z= inputplane_z*[1 1 1 1 1];
-hplane=plot3(x, y, z, 'k');
-
-
-%htext=text(10,-10,inputplane_z,'Input plane') 
- 
- % Draw Scatter plot of intersections on input plane
- htrace=scatter3(Ptrace(1,:),Ptrace(2,:),Ptrace(3,:),'.');
- htrace.CData=[0    0.4470    0.7410];
- htrace.CData = colorpass;
- hvignet=scatter3(Pvignet(1,:),Pvignet(2,:),Pvignet(3,:),'.');
- hvignet.CData=[0.9 0.4 0.4]
- hvignet.CData = colornopass;
-
- % Label origin
- origin=[0;positions(p);inputplane_z];
- htext=text(-10,origin(2),origin(3),'Point on input plane')
- 
-% Draw a   subset of rays for visual effect
-for c=1:1:size(Ptrace,3)
- line([origin(1) Ptrace(1,c)],[origin(2) Ptrace(2,c)],[origin(3) Ptrace(3,c)],'color',htrace.CData)
-end 
-   
-for c=1:20:size(Pvignet,3)
- line([origin(1) Pvignet(1,c)],[origin(2) Pvignet(2,c)],[origin(3) Pvignet(3,c)],'color',hvignet.CData)
-end 
-
-
- view(-27,18)
- 
-xlim([-24 24])
-ylim([-24 24])
-legh=legend([htrace hvignet],'Rays that reach sensor','Rays that do not pass')
-legh.Box='off'
-legh.Position=[0.4486 0.7819 0.4122 0.0945];
-
-ax=gca;
-ax.XAxis.Visible='off'
-ax.YAxis.Visible='off'
-ax.ZAxis.Visible='off'
-
-
-exportgraphics(gca,'./fig/visualizePlaneIntersection.eps')
-%exportgraphics(gca,'./fig/visualizeVignetCircleMethod.png')
-
-
-
-
-%%
+colornopass = [1 1 1]*0.9;
+%colorpass = colors(160,:);
+colorpass = [0 49 90]/100;    
 
 %% Visualisze traces Horizontal
 circlePlaneZ=inputplane_z+   entrancepupil_distance;
