@@ -5,10 +5,13 @@
 
 # Ray Pass Functions
 ## Ellipses
+
 <div>
-<img src="./raypassellipse.png" alt="Ray pass function JSON ellipse" width="100%" >
+<img src="./raypassellipse.png" alt="Ray pass function JSON ellipse" width="80%" >
 </div>
+
 ## Circles
+
 <div>
-<img src="./raypasscircles.png" alt="JSON structure to define circle ray pass" width="100%" >
+<img src="./raypasscircles.png" alt="JSON structure to define circle ray pass" width="40%" >
 </div>
