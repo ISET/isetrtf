@@ -38,7 +38,6 @@ config{i}.polydegree=8
 i=numel(config)+1;
 config{i}.name='petzval-5mminput';
 config{i}.filmdistance_mm=15.196;
-%config{i}.filmdistance_mm=02;
 config{i}.sensordiagonal_mm=35*2;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
@@ -93,13 +92,6 @@ thisDocker = 'vistalab/pbrt-v3-spectral:raytransfer-ellipse';
     cameraRTF.filmdistance.value=c.filmdistance_mm/1000;
     thisR.set('camera',cameraRTF);
 
-%     cameraOmni = piCameraCreate('omni','lensfile','petzval-zemax.json');
-%      cameraOmni.filmdistance.value=c.filmdistance_mm/1000;
-%      cameraOmni.filmdistance.type='float';
-%      cameraOmni = rmfield(cameraOmni,'focusdistance');
-%      cameraOmni.aperturediameter.value=28*2;
-%      cameraOmni.aperturediameter.type='float';
-%      thisR.set('camera',cameraOmni);    
 
     thisR.set('pixel samples',c.pixelsamples);
     thisR.set('film diagonal',c.sensordiagonal_mm,'mm');
