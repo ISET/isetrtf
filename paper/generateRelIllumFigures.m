@@ -35,6 +35,7 @@ config{i}.filmresolution=[900 1];
 config{i}.polydegree=8
 
 %% 
+
 i=numel(config)+1;
 config{i}.name='petzval-5mminput';
 config{i}.filmdistance_mm=15.196;
@@ -50,8 +51,8 @@ config{i}.filmdistance_mm=50;
 config{i}.sensordiagonal_mm=42*2;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
-config{i}.polydegree=8;
-
+config{i}.polydegree=9;
+%%
 i=numel(config)+1;
 config{i}.name= 'tessar'; 
 config{i}.filmdistance_mm=100;
@@ -64,11 +65,23 @@ config{i}.polydegree=6;
 
 i=numel(config)+1;
 config{i}.name='wideangle200deg-circle';
-config{i}.filmdistance_mm=2.003+0.0005;   %% Add offset to avoid issue with filmdistance = inputoffset
-config{i}.sensordiagonal_mm=5;
+config{i}.filmdistance_mm=2.004;   %% Add offset to avoid issue with filmdistance = inputoffset
+config{i}.sensordiagonal_mm=3;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[300 1];
-config{i}.polydegree=7;
+config{i}.polydegree=11;
+
+
+
+%%
+
+i=numel(config)+1;
+config{i}.name='wideangle200deg-edge';
+config{i}.filmdistance_mm=2.2;   %% Add offset to avoid issue with filmdistance = inputoffset
+config{i}.sensordiagonal_mm=3.5;
+config{i}.pixelsamples=2000;
+config{i}.filmresolution=[300 1];
+config{i}.polydegree=6;
 %% Add a lens and render.
 
 for p=1:numel(config)

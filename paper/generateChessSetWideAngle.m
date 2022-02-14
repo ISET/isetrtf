@@ -35,14 +35,14 @@ sensordiagonal_mm=3;
 % OMNI (known lens) camera
 cameraOmni = piCameraCreate('omni','lensfile','wideangle200deg-automatic-zemax.json');
 cameraOmni.filmdistance.type='float';
-cameraOmni.filmdistance.value=(filmdistance_mm+0.2)*1e-3;
+cameraOmni.filmdistance.value=(filmdistance_mm)*1e-3;
 cameraOmni = rmfield(cameraOmni,'focusdistance');
 cameraOmni.aperturediameter.value=2*0.620000005;
 cameraOmni.aperturediameter.type='float';
 
 
 % RTF camera
-rtffile=['wideangle200deg-circle-zemax-poly12-raytransfer.json'];
+rtffile=['wideangle200deg-circle-zemax-poly11-raytransfer.json'];
 cameraRTF = piCameraCreate('raytransfer','lensfile',rtffile);
 cameraRTF.filmdistance.value=filmdistance_mm*1e-3;
 
@@ -50,7 +50,7 @@ cameraRTF.filmdistance.value=filmdistance_mm*1e-3;
 %% Rendering Options
 thisR.set('pixel samples',100)
 thisR.set('film diagonal',sensordiagonal_mm,'mm');
-resolution=900;
+resolution=100;
 thisR.set('film resolution',resolution*[1 1])
     
 
