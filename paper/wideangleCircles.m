@@ -27,7 +27,7 @@ raypassplane_distancefrominput_mm=  17;
 
 
 %% Load the rays obtained using the zemax macro for the petzval lens.
-file='./data/zemaxraytrace/wideangle200deg-primaryWL1-widercircle.txt';
+file='./data/zemaxraytrace/wideangle200deg-primarywl1-gamma.txt';
 
 X=dlmread(file,'\s',1);
 
@@ -128,39 +128,52 @@ colors={[0 0 0],[0.83 0 0],[0 0.83 0] };
 colorpass = [0 49 90]/100;  
 
 fig=figure(1);clf; hold on;
-fig.Position=[667 514 560 131];
+%fig.Position=[667 514 560 131];
 count=1;
-
+colorpassblue = [0 49 90]/100;   
 % Loop only over the positions to plot
-for p=[1 24 30 80]
-    subplot(1,4,count); hold on;
+for p=[80]
+    subplot(1,1,count); hold on;
  
    % Plot collected intersections on the ray pass plane
     Ptrace=pupilshapeOnRayPassPlane(1:2,p,:);
     Ptrace=Ptrace(1:2,:);
     hscatter=scatter(Ptrace(1,:),Ptrace(2,:),'.')
-    hscatter.CData = colorpass;
-          
-     % Draw circles
-     for r=1:numel(radii)
-       offset(r)=sensitivities(r)*positions(p);
-       viscircles([0 offset(r)],radii(r),'color',colors{r},'linewidth',1.5)
-     end
-     
- 
+    hscatter.CData = colorpassblue;
+
+    Ptrace(:,isnan(Ptrace(1,:)))=[];
+  
+   [A , c] =MinVolEllipse(Ptrace, 0.01);    
+   % Extract radii and centers
+   [U D V] = svd(Ptrace);
+   radii(1,p) = 1/sqrt(D(1,1)); % Major axis
+   radii(2,p) = 1/sqrt(D(2,2));  % Minor axis
+   center=c; % XY
+   
+   radii(1)=1.1*abs(max(Ptrace(1,:))-center(1));
+   radii(2)=1.05*abs(max(Ptrace(2,:))-center(2));
+    
+    hellipse=ellipse(radii(1),radii(2),0,center(1),center(2),[0.83 0 0])
+ hellipse.LineWidth=2
    % Hide axis but place limits
     axis off
-    xlim([-10 10])
-    ylim([-10 10]+offset(1)) %Add offset to keep circles centered in figure
-    title(['$\hat{y}=$' num2str(positions(p))]) % Add off axis position on input plane
+    xlim([-1 1]*5.5)
+    ylim([-1 1]*5.5+offset(1)) %Add offset to keep circles centered in figure
+    %title(['$\hat{y}=$' num2str(positions(p))]) % Add off axis position on input plane
     
 
+    legh=legend([hscatter,hellipse],'Ray Pass Function','Ellipse approximation')
+    legh.Box='off'
+    legh.Position=[0.3474 0.5382 0.3419 0.0945];
+    
+    
     
      count=count+1;
+     
     
 end
 
-set(findall(gcf,'-property','FontSize'),'FontSize',11);
+set(findall(gcf,'-property','FontSize'),'FontSize',15);
 set(findall(gcf,'-property','interpreter'),'interpreter','latex');
 
 exportgraphics(gcf,'fig/wideangle200deg-circles.pdf')

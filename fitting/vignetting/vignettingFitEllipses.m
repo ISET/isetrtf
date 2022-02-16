@@ -107,11 +107,7 @@ for p=1:nbPositions
     
     radii(1,p)=max(X(1,:));
     radii(2,p)=max(X(2,:));
-% % 
-% %   if(abs(maxX-radii(1,p))  > abs(maxY-radii(1,p)))
-% %     angle=acosd(V)
-% %     radii(:,p)=flip(radii(:,p),1);
-% %   end
+
 end
 
 

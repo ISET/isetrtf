@@ -1,4 +1,4 @@
-function fig = plotESF(degrees,pixels,distances,esfPBRT,esfZemax)
+function fig = plotESF(degrees,pixels,distances,esfPBRT,esfZemax,addzemaxtolegend)
 %PLOTESF Plot and compare the ESF with ZEMAX
 % The current implementation just shows the RTF result for the highest
 % polynomial degree. 
@@ -39,16 +39,36 @@ end
 box on
 roundedDistanceMeter= round(distances(2)/1000,1);
 if(roundedDistanceMeter ==0)
-    legh=legend([hrtf(1) hrtf(2) hzemax],['' sprintf('%0.1f',distances(1)/1000) '$\,$m'],['' sprintf('%0.1f',distances(2)/100) '$\,$cm'],'Zemax')
+   textLeg={['' sprintf('%0.1f',distances(1)/1000) ' m'],['' sprintf('%0.1f',distances(2)/10) ' cm'],'Zemax'};
 else
-legh=legend([hrtf(1) hrtf(2) hzemax],['' sprintf('%0.1f',distances(1)/1000) '$\,$m'],['' sprintf('%0.1f',distances(2)/1000) '$\,$m'],'Zemax')
+    textLeg={['' sprintf('%0.1f',distances(1)/1000) ' m'],['' sprintf('%0.1f',distances(2)/1000) ' m'],'Zemax'};
 end
+
+if(addzemaxtolegend)
+    [legh,icons]=legend([hrtf(1) hrtf(2) hzemax],textLeg);
+else
+    [legh,icons]=legend([hrtf(1) hrtf(2)],textLeg{1:2});
+end
+% Legend formatting
 legh.Box = 'on' ;
-legh.Location='northeast'
-legh.Color='w'
+%legh.Color='w'
 legh.EdgeColor=legh.Color;
 %legh.Orientation= 'horizontal' ;
 legh.Position= [0.5559 0.7332 0.4422 0.1746]
+
+ textobj = findobj(icons, 'type', 'text');
+ for t=1:numel(textobj)
+  set(textobj(t), 'Interpreter', 'latex');
+  set(textobj(t), 'Fontsize', 10);
+ end
+
+ %Adjust sizes of line segments in legend
+lineobj = findobj(icons, 'type', 'line');
+for t=1:numel(lineobj)
+ lineXData = get(lineobj(t), 'XData');
+ lineXData(1:2) = [0.3 0.453];  % Change this line to give you the x coordinates you want
+  set(lineobj(t), 'XData', lineXData);
+% end
 
 xlabel('Distance ($\mu$m)')
 

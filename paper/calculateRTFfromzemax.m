@@ -33,12 +33,12 @@ polynomialDegrees{end+1}=[6];
 
 %% Wide angle lens 200deg  with spherical output surface WIDE RANGE for vignetting
 lensName{end+1}='wideangle200deg-circle-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/wideangle200deg-primarywl1-gamma.txt';
+zemaxDataFile{end+1}='./data/zemaxraytrace/wideangle200deg-primaryWL1.txt';
 offset_sensorside{end+1}=2.003;
 offset_objectside{end+1}=2; %%mm
 lensThickness{end+1}=14.19057;
 disable_dz_polynomial{end+1}=false;
-polynomialDegrees{end+1}=[10];  
+polynomialDegrees{end+1}=[1:13];  
 
 %%
 

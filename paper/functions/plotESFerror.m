@@ -16,6 +16,7 @@ for i=1:numel(distances)
    %Resample rtf ESF to same grid as zemax
    edgeResampled=interp1(pixels,esfPBRT(:,d,i),pixelsZemax);
    ignoreNan = ~isnan(edgeResampled);
+   
 
    % To normalize the saturation value, given the possible presence of rendering noise,
    % we divide by the maxmimum of a smoothed ESF.
@@ -53,15 +54,41 @@ end
 box on
 
 
-legh=legend([h(1) h(2)],['' sprintf('%0.1f',distances(1)/1000) '$\,$m'],['' sprintf('%0.1f',distances(2)/1000) '$\,$m'])
-legh.Box = 'off' ;
-legh.Orientation= 'vertical' ;
-legh.Location='northeast'
-%legh.Position= [-0.058356474187099 0.912585689373147 1.056511262772188 0.095693777622789];
-
 
 set(findall(gcf,'-property','FontSize'),'FontSize',10);
 set(findall(gcf,'-property','interpreter'),'interpreter','latex');
+roundedDistanceMeter= round(distances(2)/1000,1);
+if(roundedDistanceMeter ==0)
+   textLeg={['' sprintf('%0.1f',distances(1)/1000) ' m'],['' sprintf('%0.1f',distances(2)/10) ' cm'],'Zemax'};
+else
+    textLeg={['' sprintf('%0.1f',distances(1)/1000) ' m'],['' sprintf('%0.1f',distances(2)/1000) ' m'],'Zemax'};
+end
+
+
+
+[legh,icons]=legend([h(1) h(2)],textLeg)
+legh.Box = 'off' ;
+legh.Orientation= 'vertical' ;
+legh.Location='northeast'
+%legh.EdgeColor='w';
+%legh.Position= [-0.058356474187099 0.912585689373147 1.056511262772188 0.095693777622789];
+
+ textobj = findobj(icons, 'type', 'text');
+ for t=1:numel(textobj)
+  set(textobj(t), 'Interpreter', 'latex');
+  set(textobj(t), 'Fontsize', 10);
+ end
+ %Adjust sizes of line segments in legend
+lineobj = findobj(icons, 'type', 'line');
+for t=1:numel(lineobj)
+ lineXData = get(lineobj(t), 'XData');
+ lineXData(1:2) = [0.3 0.453];  % Change this line to give you the x coordinates you want
+  set(lineobj(t), 'XData', lineXData);
+end
+
+ 
+
+
 
 end
 

@@ -47,6 +47,22 @@ config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
 % config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
 
 
+%% Wide angle lens with smaller image circle - converges already for polynomial degree 5
+config{end+1}=[]
+config{end}.rtfname='wideangle200deg-limitcircle-zemax';
+config{end}.distances = [3000 100]; % Distance of object as measured from lens front vertex (mm)
+config{end}.scalefactors=[0.6 0.4] % Scale the size of the chart accorrdingly to get enough resolution (make small avoid smoothing)
+config{end}.filmdistance_mm=2.010; % Distance of sensor from rear vertex
+config{end}.filmdiagonal_mm=2*1.23/100; 
+config{end}.degrees=[5]; % Polynomial degrees to try
+config{end}.rays=2000; % Number of rays per film pixel to trace
+config{end}.resolution=2000; % Number of pixels (horizontally)
+config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
+
+
+
+
+
 %%
 config{end+1}=[]
 config{end}.rtfname='inversetelephoto-zemax';
@@ -81,7 +97,7 @@ config{end}.scalefactors=[0.6 0.4] % Scale the size of the chart accorrdingly to
 config{end}.filmdistance_mm=2.010; % Distance of sensor from rear vertex
 config{end}.filmdiagonal_mm=2*1.23/100; 
 config{end}.degrees=[1:13]; % Polynomial degrees to try
-config{end}.rays=2000; % Number of rays per film pixel to trace
+config{end}.rays=5000; % Number of rays per film pixel to trace
 config{end}.resolution=2000; % Number of pixels (horizontally)
 config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
 
@@ -108,7 +124,7 @@ config{end}.zemaxfileESF='data/ESF/esf-tessar.mat';
 config{end+1}=[]
 config{end}.rtfname='cooke40deg-zemax';
 config{end}.distances = [300 500]
-config{end}.scalefactors=[0.03 0.4]
+config{end}.scalefactors=[0.03 0.45]
 config{end}.filmdistance_mm=51.915;
 config{end}.filmdiagonal_mm=2.4;
 config{end}.degrees=[1:12];
@@ -135,9 +151,10 @@ for i=1:numel(config)
 
 end
 
+%save ./data/tmp/dataESF.mat
+
 % Play glorious soud when ready
-load handel
-sound(y,Fs)
+load handel;sound(y,Fs);
 
 
 %% Make Plots of RMS Error 
@@ -150,15 +167,19 @@ for i=1:numel(config)
 
     % Plots
     fig=figure(i);clf;
-    plotESFerror(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},noisefloor{i},esfZemax)
-    set(gca,'Yscale','linear')
-    exportgraphics(gcf,['./fig/ESF/esf-error-' c.rtfname '.pdf'])
     set(gca,'Yscale','log')
-        if(c.rtfname == "dgauss28deg-zemax")
+    plotESFerror(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},noisefloor{i},esfZemax)
+    %set(gca,'Yscale','linear')
+    %exportgraphics(gcf,['./fig/ESF/esf-error-' c.rtfname '.pdf'])
+    
+      if(c.rtfname == "dgauss28deg-zemax")
        % Add label for rendering noise level
        text(0.1,1.8e-3,sprintf('RMS Rendering Noise'),'interpreter','latex','fontsize',9)
-    end
-    exportgraphics(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.pdf'])
+      end
+      
+      
+%    exportgraphics(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.pdf'])
+    saveas(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.png'])
 
         
 end
@@ -178,15 +199,19 @@ for i=1:numel(config)
     % Plots
     figure(i);clf; hold on
     
-   % Add zemax legend on double gauss lens
-    if(i==5)
-        line([17 220] , 0.9*[1 1],'linestyle','-.','color','k','linewidth',2)
-        text(220,0.9,'Zemax')
-    end
-    plotESF(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},esfZemax)
+    % Only add legend for double gauss lens
+    addzemaxtolegend= false;
+    if(c.rtfname=="dgauss28deg-zemax"),    addzemaxtolegend= true;        end
+   
+
+    plotESF(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},esfZemax,addzemaxtolegend)
+    
+  
+        
+
     %if(i==4)        xlim([-100 100]),    end
-    if(i==6)        xlim([-800 800]),    end
-    exportgraphics(gcf,['./fig/ESF/esf-' c.rtfname '.pdf'])
+    if(i>6)        xlim([-800 800]),    end
+    exportgraphics(gcf,['./fig/ESF/esf-' c.rtfname '.png'])
     
   
 end

@@ -1,4 +1,4 @@
-function [esf,pixels_micron,renderNoiseFloor] = generateESF(varargin)
+function [esf,pixels_micron,renderNoiseFloor] = calculateESF(varargin)
 %% GenerateESF  - Generate a matrix of ESF functions  for a given RTF file
 % INPUTS
 %    rtfname - the prefix name of the rtf
@@ -130,7 +130,7 @@ piWrite(thisR);
 
 % Estimate noise for a patch around the center
 edgePBRT=double(oi.data.photons(end,end/2-200:end/2+200,1)); % Take horizontal line in center
-edgePBRT=edgePBRT/max(mean(edgePBRT));
+edgePBRT=edgePBRT/mean(edgePBRT);
 renderNoiseFloor=rms(1-edgePBRT);
 
 
