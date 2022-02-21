@@ -90,8 +90,7 @@ for c=1:numel(cameras)
         
         % Add chart at depth
         positionXY = [0 0];% Center
-        scaleFactor=scaleFactors(i);
-        piChartAddatDistanceFromFilm(thisR,distancesFromFilm_meter(i),positionXY,scaleFactor);
+        addLightSourceEdge(thisR,distancesFromFilm_meter(i));
         %
         thisR.set('camera',cameras{c});
         thisR.set('spatial resolution',[resolution 1]);
@@ -148,56 +147,31 @@ for i=1:numel(distancesFromFilm_meter)
 end
 
 
-
-function thisR = piChartAddatDistanceFromFilm(thisR,distanceFromFilm,positionXY,scalefactor)
-
- %% Place a SLantedBarChart at specified Distance and position in the scene
-% INPUTS
-% thisR - piRecipe object of the scene
-% distanceFromFilm - distance from the pbrt film to the plane of the chart
-
-% Position XY: on the object plane
-
-% Set scale factor if not given
-    if nargin < 4
-    scalefactor=  1;
-  end
- 
-  
-% Film position might not be at origin,
-% We assume optical axis on z axis
-% We force the camera direction along the z direction
-thisR.lookAt.from= [0 0 0];
-thisR.lookAt.to = thisR.lookAt.from+[0 0 1];
-filmZPosition=thisR.lookAt.from(3); 
-
-% Load slantedbar asset
-sbar = piAssetLoad('slantedbar');
-
-% Merge with given recipe
-thisR=piRecipeMerge(thisR,sbar.thisR,'node name',sbar.mergeNode);
-
-% Set scale to same as world coordinate system
-initialScale=sbar.thisR.assets.Node{3}.scale{1};
-
-% PATCH: Adding the same asset multiple times makes mergenode na,me
-% nonunique. Although when adding a prefix is added, we do not have that
-% prefix
-%To implement ( from zheng) [~, newName] = piObjectInstanceCreate(thisR, 'colorChecker_B');
-
-findIDWithPostfix=piAssetFind(thisR,'name','slantedbar-6680_G');
-lastID=findIDWithPostfix(end); % latest is the one we added
-newName=thisR.assets.Node{lastID}.name;
+%%% 
 
 
-% The scaling will affact translastions, so we first undo the scaling,
-% translate and reapply another scaling;
-thisR.set('node', newName, 'scale', 1./initialScale);  % Undo initial scaling
-thisR.set('node', newName, 'world position', [positionXY distanceFromFilm+filmZPosition]);  %  Translate to desired position
-newScale=[0.2*initialScale(1:3)]*scalefactor  *distanceFromFilm/(2-filmZPosition); % This makes sure the size of the image remains approx identical whenplaced at different depths .
-thisR.set('node', newName, 'scale', newScale);  % Rescale as desired
+%% Add A step function using an area light in PBRT
+% I did not find how to make a square light source so I made a very large circular
+% light source offset by its radius. This approximates a step function on
+% the horizontal line.
+ function thisR = addLightSourceEdge(thisR,distanceFromFilm)
+     % Orient the camera the way I want it, making it easy for me   
+     thisR.lookAt.from= [0 0 0];        thisR.lookAt.to= [0 0 1] ;
+        piLightDelete(thisR,1) % delete all other light sources in the scene
+        
+        
+        radius=4; % Choose a large radius for the circle
+        
+        % Create offset circle area light
+        light=piLightDiskCreate('position',[-radius 0 distanceFromFilm],'radius',radius)
+        
+        % Add light to recipe
+        thisR=piAddLights(thisR,{light})
+        
 
 end
+
+
 
 
 end

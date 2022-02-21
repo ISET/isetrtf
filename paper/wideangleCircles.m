@@ -138,8 +138,10 @@ for p=[80]
    % Plot collected intersections on the ray pass plane
     Ptrace=pupilshapeOnRayPassPlane(1:2,p,:);
     Ptrace=Ptrace(1:2,:);
-    hscatter=scatter(Ptrace(1,:),Ptrace(2,:),'.')
+    hscatter=scatter(Ptrace(1,:),Ptrace(2,:),'o');
     hscatter.CData = colorpassblue;
+    hscatter.SizeData=80
+    hscatter.MarkerFaceColor= colorpassblue;
 
     Ptrace(:,isnan(Ptrace(1,:)))=[];
   
@@ -162,7 +164,7 @@ for p=[80]
     %title(['$\hat{y}=$' num2str(positions(p))]) % Add off axis position on input plane
     
 
-    legh=legend([hscatter,hellipse],'Ray Pass Function','Ellipse approximation')
+    legh=legend([hscatter,hellipse],'Ray Pass Region','Ellipse approximation')
     legh.Box='off'
     legh.Position=[0.3474 0.5382 0.3419 0.0945];
     

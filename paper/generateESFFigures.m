@@ -25,7 +25,7 @@ config{end}.distances = [3000 3500];
 config{end}.scalefactors=[0.03 0.3]/1.5
 config{end}.filmdistance_mm=18.667;
 config{end}.filmdiagonal_mm=2*45/100;
-config{end}.degrees=[1:12];
+config{end}.degrees=[1:9];
 config{end}.rays=5000;
 config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
@@ -54,7 +54,7 @@ config{end}.distances = [3000 100]; % Distance of object as measured from lens f
 config{end}.scalefactors=[0.6 0.4] % Scale the size of the chart accorrdingly to get enough resolution (make small avoid smoothing)
 config{end}.filmdistance_mm=2.010; % Distance of sensor from rear vertex
 config{end}.filmdiagonal_mm=2*1.23/100; 
-config{end}.degrees=[5]; % Polynomial degrees to try
+config{end}.degrees=[1:7]; % Polynomial degrees to try
 config{end}.rays=2000; % Number of rays per film pixel to trace
 config{end}.resolution=2000; % Number of pixels (horizontally)
 config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
@@ -79,7 +79,7 @@ config{end}.zemaxfileESF='data/ESF/esf-inversetelephoto.mat';
 config{end+1}=[]
 config{end}.rtfname='dgauss28deg-zemax';
 config{end}.distances = [1000 1200]
-config{end}.scalefactors=[0.03 0.3]
+config{end}.scalefactors=[0.03/1.3 0.3/2]
 config{end}.filmdistance_mm=67.768;
 config{end}.filmdiagonal_mm=150/100;
 config{end}.degrees=[1:7];
@@ -174,7 +174,7 @@ for i=1:numel(config)
     
       if(c.rtfname == "dgauss28deg-zemax")
        % Add label for rendering noise level
-       text(0.1,1.8e-3,sprintf('RMS Rendering Noise'),'interpreter','latex','fontsize',9)
+       text(0.1,1.8e-3,sprintf('RMS Rendering Noise'),'interpreter','latex','fontsize',8.5)
       end
       
       
