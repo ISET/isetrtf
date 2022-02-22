@@ -32,3 +32,12 @@ The general use of the software is
 
 # Publication
 T. Goossens, Z. Lyu, J. Ko, G. Wan, J. Farrell, B. Wandell, *Ray-transfer functions for camera simulation of 3D scenes with hidden lens design*, https://arxiv.org/abs/2202.08880
+
+# RTF in PBRT Compared to tracing Through Lens
+<div>
+<img src="./paper/fig/drawings/chessSet-dgauss28deg-Omni.png" alt="RTF" width="49%" >
+<img src="./paper/fig/drawings/chessSet-dgauss28deg-RTF.png" alt="RTF" width="49%" >
+<img src="./paper/fig/drawings/chessSet-hline-dgauss28deg.png" alt="RTF" width="100%" >
+</div>
+
+
