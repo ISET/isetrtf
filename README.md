@@ -1,4 +1,4 @@
-# Ray Transfer Function
+# ISETRTF: Using ray transfer functions for camera simulation in PBRT with unknown lens designs
 
 
 Repository for software to support the analyses in the paper on ray transfer functions
