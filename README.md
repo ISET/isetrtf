@@ -3,7 +3,9 @@
 
 Repository for software to support the analyses in the paper on ray transfer functions
 <div>
-<embed src="./paper/fig/drawings/rtf-function.pdf" alt="JSON Structure" width="100%" >
+<img src="./paper/fig/drawings/rtf-matrix.pdf-1.png" alt="RTF" width="33%" >
+<img src="./paper/fig/drawings/rtf-function.pdf-1.png" alt="RTF" width="33%" >
+<img src="./paper/fig/drawings/rtf-surface.pdf-1.png" alt="RTF" width="33%" >
 </div>
 
 
