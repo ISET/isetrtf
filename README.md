@@ -1,6 +1,14 @@
 # Ray Transfer Function
 
+
 Repository for software to support the analyses in the paper on ray transfer functions
+
+
+<div>
+<img src="./RTF JSON documentation.png" alt="JSON Structure" width="100%" >
+</div>
+
+
 
 # Requirements to run
 
