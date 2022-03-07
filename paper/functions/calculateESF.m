@@ -42,7 +42,6 @@ p.addParameter('rtfname', @ischar);
 p.addParameter('rays',2000, @isnumeric);
 p.addParameter('filmdiagonal', @isnumeric);
 p.addParameter('filmdistance',@isnumeric);
-p.addParameter('scalefactors',@isnumeric);
 p.addParameter('resolution',1000,@isnumeric);
 p.addParameter('degrees',@isnumeric)
 p.addParameter('distances',@isnumeric) % Distances to chart measuerd from lens object side vertex
@@ -54,7 +53,6 @@ filmdiagonal_mm = p.Results.filmdiagonal;
 filmdistance_mm= p.Results.filmdistance;
 rtfName = p.Results.rtfname;
 degrees= p.Results.degrees;
-scaleFactors= p.Results.scalefactors;
 distancesFromLens_mm = p.Results.distances; % mm to meter
 nbRaysPerPixel=p.Results.rays;
 resolution=p.Results.resolution;
@@ -86,11 +84,10 @@ for c=1:numel(cameras)
         disp(['Render Camera ' num2str(c) ' position ' num2str(i)])
         
         % Build the scene
-        thisR=piRecipeDefault('scene name','flatsurface');
+        thisR=piRecipeDefault('scene name','stepfunction');
         
-        % Add chart at depth
-        positionXY = [0 0];% Center
-        addLightSourceEdge(thisR,distancesFromFilm_meter(i));
+        % Control Distance to Step Funtion Chart
+         setChartDistance(thisR,distancesFromFilm_meter(i));
         %
         thisR.set('camera',cameras{c});
         thisR.set('spatial resolution',[resolution 1]);
@@ -103,7 +100,7 @@ for c=1:numel(cameras)
         [oi log] = piRender(thisR,'render type','radiance','dockerimagename','vistalab/pbrt-v3-spectral:latest');
         oi.name=['Chart distance from film: ' num2str(distancesFromFilm_meter(i))]
         oiList{c,i}=oi;
-        %oiWindow(oi)
+        
     end
     
 end
@@ -147,29 +144,64 @@ for i=1:numel(distancesFromFilm_meter)
 end
 
 
-%%% 
-
-
-%% Add A step function using an area light in PBRT
-% I did not find how to make a square light source so I made a very large circular
-% light source offset by its radius. This approximates a step function on
-% the horizontal line.
- function thisR = addLightSourceEdge(thisR,distanceFromFilm)
-     % Orient the camera the way I want it, making it easy for me   
-     thisR.lookAt.from= [0 0 0];        thisR.lookAt.to= [0 0 1] ;
-        piLightDelete(thisR,1) % delete all other light sources in the scene
-        
-        
-        radius=4; % Choose a large radius for the circle
-        
-        % Create offset circle area light
-        light=piLightDiskCreate('position',[-radius 0 distanceFromFilm],'radius',radius)
-        
-        % Add light to recipe
-        thisR=piAddLights(thisR,{light})
-        
-
+%%
+% The distance to the stepfunction chart, positioned at the xy-plane at z=0, is controlled by changing the distance of the
+% camera. 
+function thisR = setChartDistance(thisR,distanceFromFilm)
+    thisR.lookAt.from= [0 0 -distanceFromFilm];
+    thisR.lookAt.to= [0 0 1] ;
+    thisR.lookAt.up=[ 0 1 0];
 end
+
+
+
+
+
+% 
+% %% Add A step function using an area light in PBRT
+% % I did not find how to make a square light source so I made a very large circular
+% % light source offset by its radius. This approximates a step function on
+% % the horizontal line.
+%  function thisR = addLightSourceEdge(thisR,distanceFromFilm)
+%      % Orient the camera the way I want it, making it easy for me   
+%      thisR.lookAt.from= [0 0 0];        thisR.lookAt.to= [0 0 1] ;
+%         piLightDelete(thisR,1) % delete all other light sources in the scene
+%         
+%         
+%         radius=1e4; % Choose a large radius for the circle
+%         
+%         % Create offset circle area light
+%         light=piLightDiskCreate('position',[-radius 0 distanceFromFilm],'radius',radius)
+%         
+%         % Add light to recipe
+%         thisR=piAddLights(thisR,{light})
+%         
+% 
+%  end
+
+
+
+% function pointsource = piLightDiskCreate(varargin)
+% % Create a diffuse Area source in the shape of disk
+% % By default the normal vector on the disk is pointing in the z-direction
+% 
+% p = inputParser;
+% p.addParameter('position', @isnumeric);
+% p.addParameter('radius', @isnumeric)
+% p.parse(varargin{:});
+% 
+% position_meters= p.Results.position;
+% radius_meters= p.Results.radius;
+% 
+% pointsource =  piLightCreate('diffuse disk source',...
+%     'type','area');
+%     
+% pointsource.translation.value = {[position_meters]};
+% shape.radius=radius_meters;
+% shape.meshshape='disk';
+% pointsource.shape.value=shape;
+% 
+% end
 
 
 

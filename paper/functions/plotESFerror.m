@@ -45,17 +45,19 @@ for p=1:numel(distances)
 end
 xlabel('Polynomial Degree')
 ylabel('RMSE')
-if(numel(degrees)<=8)
-    xticks(degrees)
+if(numel(degrees)<=10)
+   xticks(degrees([1:2:end]))
 else
-     xticks(degrees(1:2:end))
+  xticks(degrees([1:4:end]))
 end
+  xticks(degrees([1  round(end/2) end]))
+
 % Figure styles
 box on
 
 
 
-set(findall(gcf,'-property','FontSize'),'FontSize',10);
+%set(findall(gcf,'-property','FontSize'),'FontSize',10);
 set(findall(gcf,'-property','interpreter'),'interpreter','latex');
 roundedDistanceMeter= round(distances(2)/1000,1);
 if(roundedDistanceMeter ==0)

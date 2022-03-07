@@ -133,13 +133,13 @@ for i=1:numel(config)
     c=config{i};
     disp(['Generate ESF for ' c.rtfname])
     [esf,pixels,noisefloorTemp]=calculateESF('rtfName',c.rtfname,'distances',c.distances,...
-        'scalefactors',c.scalefactors,'filmdistance',c.filmdistance_mm,'filmdiagonal',c.filmdiagonal_mm,...
+        'filmdistance',c.filmdistance_mm,'filmdiagonal',c.filmdiagonal_mm,...
         'rays',c.rays,'degrees',c.degrees,'resolution',c.resolution);
 
     esfPBRT{i}=esf;
     noisefloor{i}=noisefloorTemp;
     pixelsPBRT{i}=pixels;
-    
+
 
 end
 
@@ -166,9 +166,9 @@ for i=1:numel(config)
     
       if(c.rtfname == "dgauss28deg-zemax")
        % Add label for rendering noise level
-       text(0.1,1.8e-3,sprintf('RMS Rendering Noise'),'interpreter','latex','fontsize',8.5)
+       text(1.1,1.8e-3,sprintf('RMS Rendering Noise'),'interpreter','latex','fontsize',8.5)
       end
-      
+      xlim([1 max(c.degrees)])
       
 %    exportgraphics(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.pdf'])
     saveas(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.png'])
