@@ -25,9 +25,11 @@ oRays=X(:,[8 9 10 11 12 13]);
 
 
 %% 3.a RTF generation options
-polyDeg = 5
-outputDir = fullfile(piRootPath, 'data/lens/RTF');
-outputDir='./' %
+polyDeg = 5;
+outputDir = fullfile(piRootPath, ['data' filesep() 'lens' filesep() 'RTF']);
+
+% Why do we reset it after we just set it?
+%outputDir= ['.' filesep()]; 
 visualize=true;
 
 %% 4. Generate RTF and produce JSON file
