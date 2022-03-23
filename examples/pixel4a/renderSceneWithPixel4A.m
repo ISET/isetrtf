@@ -30,7 +30,7 @@ lensfile=fullfile(irtfRootPath,'examples','pixel4a','pixel4a-rearcamera-ellipse'
 cameraRTF = piCameraCreate('raytransfer','lensfile',lensfile)
 cameraRTF.filmdistance.value=filmdistance_mm/1000;
 
-thisR.set('pixel samples',32);
+thisR.set('pixel samples',100); % Number of rays per pixel (Increase to reduce rendering noise)
 thisR.set('film diagonal',sensordiagonal_mm/2,'mm');
 thisR.set('film resolution',[300 300])
 
