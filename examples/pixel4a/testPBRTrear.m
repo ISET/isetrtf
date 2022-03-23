@@ -7,7 +7,7 @@ if ~piDockerExists, piDockerConfig; end
 
 %% Load PBRT recipe of the chess set scene
 thisR=piRecipeDefault('scene','ChessSet')
-thisDocker = 'vistalab/pbrt-v3-spectral:raytransfer-ellipse';
+thisDocker = 'vistalab/pbrt-v3-spectral:latest';
 
 
 %% Set camera position
@@ -25,7 +25,8 @@ sensordiagonal_mm=3.5;
 %% Render chessset scene with the ray transfer function
 
 % RTF camera 
-cameraRTF = piCameraCreate('raytransfer','lensfile','pixel4a-rearcamera-ellipse-raytransfer.json');
+lensfile=fullfile(irtfRootPath,'examples','pixel4a','pixel4a-rearcamera-ellipse','pixel4a-rearcamera-ellipse-poly5-raytransfer.json');
+cameraRTF = piCameraCreate('raytransfer','lensfile',lensfile)
 cameraRTF.filmdistance.value=filmdistance_mm/1000;
 
 thisR.set('pixel samples',32);
@@ -45,5 +46,6 @@ piWrite(thisR);
 [oi,result] = piRender(thisR,'render type','radiance','dockerimagename',thisDocker);
 
 % Show end result
+% increase pixel samples to reduce rendering noise
 oiWindow(oi)
     
