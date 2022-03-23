@@ -25,6 +25,7 @@ sensordiagonal_mm=3.5;
 %% Render chessset scene with the ray transfer function
 
 % RTF camera 
+% The lens file is taken from the local folder
 lensfile=fullfile(irtfRootPath,'examples','pixel4a','pixel4a-rearcamera-ellipse','pixel4a-rearcamera-ellipse-poly5-raytransfer.json');
 cameraRTF = piCameraCreate('raytransfer','lensfile',lensfile)
 cameraRTF.filmdistance.value=filmdistance_mm/1000;
