@@ -1,4 +1,4 @@
-%% Pixel 4 Front camera PBRT test
+%% Pixel 4a Rear (main) camera PBRT test
 % 2022 Thomas Goossens
 
 clear
