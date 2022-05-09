@@ -1,4 +1,4 @@
-%% Compare rendered chess set scene for known lens and its corresponding RTF.
+%% Compare rendered horizontal line across chesset scene for known lens and its corresponding RTF.
 
 ieInit
 if ~piDockerExists, piDockerConfig; end
@@ -38,7 +38,7 @@ config{i}.filmresolution=600;
 config{i}.raysperpixel=1000;
 config{i}.omni_aperturediameter_mm=2*0.62000000;
 config{i}.hline = 0.66; % proportion of filmresolution
-config{i}.cameraposition = -0.3; % Camera position
+config{i}.cameraposition = -0.3; % Camera position Offset because else the horizontal line goes through a bright window
 
 
 
@@ -145,13 +145,13 @@ cameraRTF.filmdistance.value=c.filmdistance_mm*1e-3;
 
 
 % Rendering Options
-%c.raysperpixel=100 % temp
+c.raysperpixel=1000 % temp
 
 thisR.set('pixel samples',c.raysperpixel)
 thisR.set('film diagonal',c.sensordiagonal_mm,'mm');
 
 thisR.set('film resolution',c.filmresolution*[1 1])
-
+thisR.set('film resolution',[4000 1])
     
 
 % Path integrator, only use one wavelength
@@ -180,6 +180,25 @@ oi.name=['RTF']
 oiRTF{ic}=oi;
 rtfTime(ic)=toc;
 
+
+% Estimate Rendering Noise with OMNI
+
+thisR=piRecipeDefault('scene','flatSurface'); 
+thisR.set('pixel samples',c.raysperpixel)
+thisR.set('film diagonal',c.sensordiagonal_mm,'mm');
+thisR.set('film resolution',c.filmresolution*[1 1])
+thisR.set('film resolution',[4000 1])
+% Set Light that is all around the world, so do not depend on the size of the target
+% This is especially important for wide angle lenses
+thisR.set('light','#1_Light_type:point','type','infinite'); 
+
+disp('---------Render Omni for estimating rendering noise----------')
+thisR.set('camera',cameraOmni);
+[oi,resultsOmniNoise] = piWRS(thisR,'render type','radiance','dockerimagename',thisDocker);
+oi.name=['noise']
+oiNoise{ic}=oi;
+
+
 end
 
 
@@ -194,8 +213,8 @@ oiList={oiOmni{ic} oiRTF{ic} }
 for i=1:numel(oiList)
         oi=oiList{i};
     oiWindow(oi);
-    line([0 600],[300 300],'linestyle','--','color',colors(i,:),'linewidth',2)
-    exportgraphics(gca,['./fig/chess/chessSet-' c.name '-' oi.name '.png'])
+%    line([0 600],[300 300],'linestyle','--','color',colors(i,:),'linewidth',2)
+    %exportgraphics(gca,['./fig/chess/chessSet-' c.name '-' oi.name '.png'])
 end
 
 
@@ -222,13 +241,6 @@ for i=1:2
     
 end
 
-relrms=rms(diff(hline,1,2))/rms(hline(:,1));
-relerr=norm(diff(hline,1,2))/norm(hline(:,1));
-
-
-
-
-
 % Format figure
 xlabel('Pixel')
 ylabel('Photons (a.u.)')
@@ -251,11 +263,44 @@ exportgraphics(gca,['./fig/chess/chessSet-hline-' c.name '.png']);
 
 
 
-% Calculate relative error histogram
-
-
 end
 
+
+
+
+%%
+fig=figure(10);clf; 
+fig.Position= [684 478 560 226];
+for ic =1:numel(config)
+   % Calculate relative error histogram
+    c=config{ic};
+oiList={oiOmni{ic} oiRTF{ic} }
+clear hline
+
+for i=1:2
+    oi=oiList{i};
+
+    % Sum up across all 31 wavelengths in the photons datacube.
+    hline(:,i)=sum(oi.data.photons(round(c.hline*end),:,:),3);
+    hline(:,i)=hline(:,i)/max(hline(:,i)); % Normalize because iset3d (piReadDAT) rescales the photon counts for RTF due to some wrong default values (fnumber and focal length not known)0
+        
+    
+end   
+   
+oi=oiNoise{ic};
+relerr(ic)=norm(diff(hline,1,2))/norm(hline(:,1));
+relerr(ic)=norm(diff(hline,1,2))/rms(hline(:,1));
+a=oi.data.photons(:,(end/2-10 ): (end/2+10),1)
+a=a/max(a); a=a/mean(a); % Two steps to avoid adding to infinity in mean;
+relnoise(ic)=rms(1-a)
+
+errors(:,ic)=abs(diff(hline,1,2))./abs(hline(:,1));
+boxplot(errors);hold on
+line([0.5 1.5]+ic-1,[1 1]*relnoise(ic),'color','g','linewidth',4)
+set(gca,'yscale','log')
+
+end
+ 
 
 %%
 

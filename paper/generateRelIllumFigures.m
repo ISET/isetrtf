@@ -64,6 +64,25 @@ config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
 config{i}.rtffile = 'cooke40deg-zemax-poly9-raytransfer.json';
 config{i}.zemaxfile='./data/relativeillumination-pbrt/cooke40deg-comparison.mat';
+
+%% 
+i=numel(config)+1;
+config{i}.name= 'cooke40deg-moredata';
+config{i}.filmdistance_mm=50;
+config{i}.sensordiagonal_mm=42*2;
+config{i}.pixelsamples=2000;
+config{i}.filmresolution=[900 1];
+config{i}.rtffile = 'cooke40deg-moredata-zemax-poly9-raytransfer.json';
+config{i}.zemaxfile='./data/relativeillumination-pbrt/cooke40deg-comparison.mat';
+%% 
+i=numel(config)+1;
+config{i}.name= 'cooke40deg-circles';
+config{i}.filmdistance_mm=50;
+config{i}.sensordiagonal_mm=42*2;
+config{i}.pixelsamples=2000;
+config{i}.filmresolution=[900 1];
+config{i}.rtffile = 'cooke40deg-zemax-poly12-circles-raytransfer.json';
+config{i}.zemaxfile='./data/relativeillumination-pbrt/cooke40deg-comparison.mat';
 %%
 i=numel(config)+1;
 config{i}.name= 'tessar'; 
@@ -109,7 +128,7 @@ thisR.set('light','#1_Light_type:point','type','infinite');
 thisDocker = 'vistalab/pbrt-v3-spectral:latest';
 
 
-  
+
 
     cameraRTF = piCameraCreate('raytransfer','lensfile',c.rtffile);
     cameraRTF.filmdistance.value=c.filmdistance_mm/1000;

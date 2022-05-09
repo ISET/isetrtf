@@ -16,17 +16,18 @@ for i=1:numel(distances)
    %Resample rtf ESF to same grid as zemax
    edgeResampled=interp1(pixels,esfPBRT(:,d,i),pixelsZemax);
    ignoreNan = ~isnan(edgeResampled);
-   
+   ignoreZero= ~(edgeZemax==0);
+   %ignoreOne = ~(edgeZemax==1);
+   ignore = and(ignoreZero,ignoreNan);
 
    % To normalize the saturation value, given the possible presence of rendering noise,
    % we divide by the maxmimum of a smoothed ESF.
-   N=20;
-   smooth = @(x)conv(x,ones(1,N)/N,'same' )
-   edgeResampled = edgeResampled/max(smooth(edgeResampled));
-   %edgeResampled = edgeResampled/max((edgeResampled));
-   
+   N=10;
+   edgeIgnoreNan=edgeResampled(ignoreNan);
+   edgeResampled = edgeResampled/mean(edgeIgnoreNan(1:N)); % Smooth out some of the rendering noise to make the edge converge to one
+      
    % Compare width of ESF
-   error(d,i) = errormetric(edgeResampled(ignoreNan)-edgeZemax(ignoreNan));
+   error(d,i) = errormetric(edgeResampled(ignore)-edgeZemax(ignore));
 
       end
 end
@@ -40,17 +41,12 @@ colorpassblue = [0 49 90]/100;
 color =[0.833 0 0 ; colorpassblue]
 for p=1:numel(distances)
     h(p)=plot(degrees,error(:,p),'linewidth',2,'color',color(p,:))
-    line([degrees(1) degrees(end)],[renderNoiseFloor renderNoiseFloor],'color','k','linewidth',2,'linestyle','--')
+    %line([degrees(1) degrees(end)],[renderNoiseFloor renderNoiseFloor],'color','k','linewidth',2,'linestyle','--')
    
 end
 xlabel('Polynomial Degree')
 ylabel('RMSE')
-if(numel(degrees)<=10)
-   xticks(degrees([1:2:end]))
-else
-  xticks(degrees([1:4:end]))
-end
-  xticks(degrees([1  round(end/2) end]))
+%xticks(degrees([1:3:end-1 end]))
 
 % Figure styles
 box on

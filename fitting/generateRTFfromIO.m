@@ -23,7 +23,7 @@ p.addParameter('fpath', '', @ischar);
 p.addParameter('sparsitytolerance', 1e-9, @isnumeric);      
 p.addParameter('outputdir',  './',@ischar);      
 p.addParameter('lensdescription',  '',@ischar);      
-p.addParameter('intersectionplanedistance',2.5893,@isnumeric);
+p.addParameter('raypassplanedistance',10,@isnumeric); % Default value, it does not really matter but not zero
 p.parse(lensName,rtfName,inputrays,outputrays,offsetinput,offsetoutput,lensThickness_mm,varargin{:});
 
 
@@ -34,7 +34,7 @@ sparsitytolerance= p.Results.sparsitytolerance;
 fpath= p.Results.fpath;
 outputdir= p.Results.outputdir;
 lensdescription= p.Results.lensdescription;
-intersectionPlaneDistance = p.Results.intersectionplanedistance;
+rayPassPlaneDistance = p.Results.raypassplanedistance;
 disableDZpoly=p.Results.disable_dz_polynomial;
 %% Prepare distances for inputoutputplane Z position calculation
 % By convention z=0 at the output side vertex of the lens
@@ -52,7 +52,7 @@ outputrays=outputrays(passedRays,:);
 
 %% Estimate Pass No Pass Function using the ellipse method
 % Collect all rays per off-axis position
-[pupilShapes,positions,intersectionplane] = vignettingIntersectionsWithPlanePerPosition(inputrays,planes.input,'circleplanedistance',intersectionPlaneDistance);
+[pupilShapes,positions,intersectionplane] = vignettingIntersectionsWithPlanePerPosition(inputrays,planes.input,'circleplanedistance',rayPassPlaneDistance);
 [radii,centers] = vignettingFitEllipses(pupilShapes);
 
 
@@ -92,11 +92,6 @@ end
 end
 
 
-%% Upsample or resample
-% positionsUpSample = linspace(positions(1),positions(end),round(0.5*numel(positions)));
-% radii=[interp1(positions,radii',positionsUpSample)']
-% centers=[ interp1(positions,centers',positionsUpSample)'];
-% positions=[ positionsUpSample];
 
 %% Polynomial fit
 fpath = fullfile(ilensRootPath, 'local', 'polyjson_test.json');
@@ -111,13 +106,13 @@ fpath = fullfile(ilensRootPath, 'local', 'polyjson_test.json');
 w=1; % only one wavelength
 rtf{w}.wavelength_nm = 550;
 rtf{w}.polyModel = polyModel;
-rtf{w}.passnopass.method='minimalellipse';
-rtf{w}.passnopass.positions=positions;
-rtf{w}.passnopass.radiiX=radii(1,:);
-rtf{w}.passnopass.radiiY=radii(2,:);
-rtf{w}.passnopass.centersX=centers(1,:);
-rtf{w}.passnopass.centersY=centers(2,:);
-rtf{w}.passnopass.intersectPlaneDistance=intersectionplane;
+rtf{w}.raypass.method='minimalellipse';
+rtf{w}.raypass.positions=positions;
+rtf{w}.raypass.radiiX=radii(1,:);
+rtf{w}.raypass.radiiY=radii(2,:);
+rtf{w}.raypass.centersX=centers(1,:);
+rtf{w}.raypass.centersY=centers(2,:);
+rtf{w}.raypass.intersectPlaneDistance=intersectionplane;
 
 
 

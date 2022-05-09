@@ -11,7 +11,7 @@
 clear; close all
 ieInit;
 config={};
-
+addpath('functions/')
 
 %% Define simulation configurations 
 
@@ -24,7 +24,7 @@ config{end}.rtfname='petzval-5mminput-zemax';
 config{end}.distances = [3000 3500];
 config{end}.filmdistance_mm=18.667;
 config{end}.filmdiagonal_mm=2*45/100;
-config{end}.degrees=[1:9];
+config{end}.degrees=[1:16];
 config{end}.rays=5000;
 config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
@@ -51,7 +51,7 @@ config{end}.rtfname='wideangle200deg-limitcircle-zemax';
 config{end}.distances = [3000 100]; % Distance of object as measured from lens front vertex (mm)
 config{end}.filmdistance_mm=2.010; % Distance of sensor from rear vertex
 config{end}.filmdiagonal_mm=2*1.23/100; 
-config{end}.degrees=[1:7]; % Polynomial degrees to try
+config{end}.degrees=[1:12];
 config{end}.rays=2000; % Number of rays per film pixel to trace
 config{end}.resolution=2000; % Number of pixels (horizontally)
 config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
@@ -66,7 +66,7 @@ config{end}.rtfname='inversetelephoto-zemax';
 config{end}.distances = [3000 40];
 config{end}.filmdistance_mm=1.195;
 config{end}.filmdiagonal_mm=2*2/100;
-config{end}.degrees=[1:12];
+config{end}.degrees=[1:16];
 config{end}.rays=5000;
 config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-inversetelephoto.mat';
@@ -77,10 +77,23 @@ config{end}.rtfname='dgauss28deg-zemax';
 config{end}.distances = [1000 1200]
 config{end}.filmdistance_mm=67.768;
 config{end}.filmdiagonal_mm=150/100;
-config{end}.degrees=[1:7];
+config{end}.degrees=[1:8]; % Polynomial degrees to try
 config{end}.rays=4000;
 config{end}.resolution=1000;
 config{end}.zemaxfileESF='data/ESF/esf-dgauss28deg.mat';
+
+
+%%
+config{end+1}=[]
+config{end}.rtfname='dgauss28deg-offset0-zemax';
+config{end}.distances = [1000 1200]
+config{end}.filmdistance_mm=67.768;
+config{end}.filmdiagonal_mm=150/100;
+config{end}.degrees=[1:8]; % Polynomial degrees to try
+config{end}.rays=4000;
+config{end}.resolution=1000;
+config{end}.zemaxfileESF='data/ESF/esf-dgauss28deg.mat';
+
 
 
 
@@ -90,7 +103,7 @@ config{end}.rtfname='wideangle200deg-circle-zemax';
 config{end}.distances = [3000 100]; % Distance of object as measured from lens front vertex (mm)
 config{end}.filmdistance_mm=2.010; % Distance of sensor from rear vertex
 config{end}.filmdiagonal_mm=2*1.23/100; 
-config{end}.degrees=[1:13]; % Polynomial degrees to try
+config{end}.degrees=[1:16]; % Polynomial degrees to try
 config{end}.rays=5000; % Number of rays per film pixel to trace
 config{end}.resolution=2000; % Number of pixels (horizontally)
 config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
@@ -119,8 +132,9 @@ config{end}.rtfname='cooke40deg-zemax';
 config{end}.distances = [300 500]
 config{end}.filmdistance_mm=51.915;
 config{end}.filmdiagonal_mm=2.4;
-config{end}.degrees=[1:12];
+config{end}.degrees=[1:16];
 config{end}.rays=2000;
+%config{end}.rays=10000;
 config{end}.resolution=1000;
 config{end}.zemaxfileESF='data/ESF/esf-cooke40deg.mat';
 
@@ -143,7 +157,7 @@ for i=1:numel(config)
 
 end
 
-%save ./data/tmp/dataESF.mat
+%load ./data/tmp/dataESF-1to16deg.mat
 
 % Play glorious soud when ready
 load handel;sound(y,Fs);
@@ -161,17 +175,20 @@ for i=1:numel(config)
     fig=figure(i);clf;
     set(gca,'Yscale','log')
     plotESFerror(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},noisefloor{i},esfZemax)
-    %set(gca,'Yscale','linear')
+    set(gca,'Yscale','linear')
+    ylim([0 0.5])
+    
     %exportgraphics(gcf,['./fig/ESF/esf-error-' c.rtfname '.pdf'])
     
       if(c.rtfname == "dgauss28deg-zemax")
        % Add label for rendering noise level
-       text(1.1,1.8e-3,sprintf('RMS Rendering Noise'),'interpreter','latex','fontsize',8.5)
+       %text(1.1,1.8e-3,sprintf('RMS Rendering Noise'),'interpreter','latex','fontsize',8.5)
       end
       xlim([1 max(c.degrees)])
+      xlim([ 1 16])
       
 %    exportgraphics(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.pdf'])
-    saveas(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.png'])
+    saveas(gcf,['./fig/ESF/esf-error-' c.rtfname '.png'])
 
         
 end

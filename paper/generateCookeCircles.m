@@ -5,7 +5,7 @@
 
 %% Define RTF Parameters
 clear;close all;
-lensFileName= 'cooke40deg-moredata';
+lensFileName= 'cooke40deg';
 
 % Lens thickness (distance between first and last surface)
 lensThickness=17.96897;
@@ -26,7 +26,7 @@ raypassplane_distancefrominput_mm=  17;
 
 %% Load the rays obtained using the zemax macro for the petzval lens.
 file='./data/zemaxraytrace/cooke40deg-primaryWL1.txt';
-file='./data/zemaxraytrace/cooke40deg-moredatapoints.txt';
+
 % Note to user: It turns out the circles vary more smoothly when placing the inputoutput planes at an
 % offset of 5 mm instead of 0.01 mm. This makes it easier to find the
 % interpolating circles.
@@ -85,7 +85,7 @@ end
 
 
 %% Estimate circle 1 ( this one corresponds to the exit pupil , but projected to the ray pass plane)
-position_selection=[20]; %% Choose off axis position of interest.
+position_selection=[10]; %% Choose off axis position of interest.
 offaxis_distances=positions(position_selection);
 pupils=pupilshapeOnRayPassPlane(1:2,position_selection,:)
 
@@ -95,12 +95,12 @@ offset=0.01; stepsize_radius=0.01;
 % Find radius and sensitivity of the tangent circle on the bottom
 [radius_1,sensitivity_1]=findCuttingCircleEdge(pupils,offaxis_distances,"bottom",'offset',offset,'stepsizeradius',stepsize_radius)
 %% Estimate circle 2
-position_selection=[20 30]; % Choose the positions for which the top circle is unaffected by vignetting.
+position_selection=[ 35 40]; % Choose the positions for which the top circle is unaffected by vignetting.
 offaxis_distances=positions(position_selection);
 pupils=pupilshapeOnRayPassPlane(1:2,position_selection,:)
 
 % Tuning parameters
-offset=0.01;stepsize_radius=0.01;
+offset=0.05;stepsize_radius=0.01;
 
 % Find radius and sensitivity of the tangent circle on the top ( where it
 % cuts)
@@ -108,27 +108,27 @@ offset=0.01;stepsize_radius=0.01;
 
 
 %% Estimate circle 3
-position_selection=[40]; % Choose the positions for which the top circle is unaffected by vignetting.
+position_selection=[42]; % Choose the positions for which the top circle is unaffected by vignetting.
 offaxis_distances=positions(position_selection);
 pupils=pupilshapeOnRayPassPlane(1:2,position_selection,:);
 
 % Tuning parameters
-offset=0.05; stepsize_radius=0.01;
+offset=0.01; stepsize_radius=0.1;
 % Find radius and sensitivity of the tangent circle on the top (where it
 % cuts)
-[radius_top_3,sensitivity_top_3]=findCuttingCircleEdge(pupils,offaxis_distances,"bottom",'offset',offset,'stepsizeradius',stepsize_radius)
+[radius_top_3,sensitivity_top_3]=findCuttingCircleEdge(pupils,offaxis_distances,"top",'offset',offset,'stepsizeradius',stepsize_radius)
 
 
 %% Estimate circle 4
-position_selection=[58]; % Choose the positions for which the top circle is unaffected by vignetting.
+position_selection=[ 40 41 42]; % Choose the positions for which the top circle is unaffected by vignetting.
 offaxis_distances=positions(position_selection);
 pupils=pupilshapeOnRayPassPlane(1:2,position_selection,:);
 
 % Tuning parameters
-offset=0.05; stepsize_radius=0.1;
+offset=0.01; stepsize_radius=0.1;
 % Find radius and sensitivity of the tangent circle on the top (where it
 % cuts)
-[radius_top_4,sensitivity_top_4]=findCuttingCircleEdge(pupils,offaxis_distances,"top",'offset',offset,'stepsizeradius',stepsize_radius)
+[radius_top_4,sensitivity_top_4]=findCuttingCircleEdge(pupils,offaxis_distances,"bottom",'offset',offset,'stepsizeradius',stepsize_radius)
 
 
 
@@ -140,7 +140,7 @@ sensitivities = [sensitivity_1 sensitivity_top_3 sensitivity_top_2 sensitivity_t
 
 %% Make figure for paper showing the circle intersection 
 
-colors={[0 0 0],[0.83 0 0],[0 0.83 0], [ 0.5 0.8 0.9] };
+colors={[0 0 0],[0.83 0 0],[0 0.83 0],[0.5 0.5 0] };
 colorpass = [0 49 90]/100;  
 
 fig=figure(1);clf; hold on;
@@ -148,9 +148,9 @@ fig.Position=[667 514 560 131];
 count=1;
 
 % Loop only over the positions to plot
-
-for p=[1 40 51 56 59]
-    subplot(1,5,count); hold on;
+selection=[1 35 40 41 42]
+for p=selection
+    subplot(1,numel(selection),count); hold on;
  
    % Plot collected intersections on the ray pass plane
     Ptrace=pupilshapeOnRayPassPlane(1:2,p,:);
@@ -167,8 +167,8 @@ for p=[1 40 51 56 59]
  
    % Hide axis but place limits
     axis off
-    xlim([-10 10])
-    ylim([-10 10]+offset(1)) %Add offset to keep circles centered in figure
+    xlim([-10 10]*2)
+    ylim([-10 10]*2+offset(1)) %Add offset to keep circles centered in figure
     title(['$\hat{y}=$' num2str(positions(p))]) % Add off axis position on input plane
     
 
@@ -180,6 +180,6 @@ end
 set(findall(gcf,'-property','FontSize'),'FontSize',11);
 set(findall(gcf,'-property','interpreter'),'interpreter','latex');
 
-exportgraphics(gcf,'fig/cooke40deg-circles.pdf')
+exportgraphics(gcf,'fig/cooke-circles.pdf')
 
 

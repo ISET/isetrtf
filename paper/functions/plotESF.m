@@ -52,9 +52,10 @@ end
 % Legend formatting
 legh.Box = 'on' ;
 %legh.Color='w'
-legh.EdgeColor=legh.Color;
+legh.EdgeColor='none';
+set(legh,'color','none');
 %legh.Orientation= 'horizontal' ;
-legh.Position= [0.5559 0.7332 0.4422 0.1746]
+legh.Position= [0.4559 0.7 0.4422 0.1746]
 
  textobj = findobj(icons, 'type', 'text');
  for t=1:numel(textobj)
@@ -73,6 +74,7 @@ for t=1:numel(lineobj)
 xlabel('Distance ($\mu$m)')
 
 set(findall(gcf,'-property','FontSize'),'FontSize',10);
+legh.FontSize=9
 set(findall(gcf,'-property','interpreter'),'interpreter','latex');
 
 end

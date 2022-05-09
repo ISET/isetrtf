@@ -61,7 +61,9 @@ FOR hIndex, 0, NumOfHeightStep, 1
     FOR rIndex, 0, NumOfRadiusStep, 1
     
         IF (rIndex != 0)
-            FOR aIndex, 0, rIndex*NumOfAnglesStep-1, 1
+           ! The number of angular samples increases linearly with radial distance to compensate for the increased sample distance
+           ! when uniformly sampling in polar coordinates.
+               FOR aIndex, 0, rIndex*NumOfAnglesStep-1, 1
                 px = rIndex * RadiusDelta * COSI(aIndex*AnglesDelta/rIndex)
                 py = rIndex * RadiusDelta * SINE(aIndex*AnglesDelta/rIndex)
                 RAYTRACE hx, hy, px, py, 1

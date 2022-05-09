@@ -105,12 +105,12 @@ for c=1:numel(cameras)
     
 end
 
+
 %% Determine Render noise floor
 disp(['Estimate Render Noise Floor'])
 
 % Build the scene with white diffuse flat surface
 thisR=piRecipeDefault('scene name','flatsurface');
-
 
 % Set identical camera setup
 thisR.set('camera',cameras{end});
@@ -128,6 +128,9 @@ piWrite(thisR);
 edgePBRT=double(oi.data.photons(end,end/2-200:end/2+200,1)); % Take horizontal line in center
 edgePBRT=edgePBRT/mean(edgePBRT);
 renderNoiseFloor=rms(1-edgePBRT);
+
+
+
 
 
 %% Generate ESF matrix

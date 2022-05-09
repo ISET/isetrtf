@@ -21,14 +21,14 @@ polynomialDegrees={};% Polynomial degrees to fit for this lens
 
 
 
-%% EDGE Wide angle lens 200deg  with spherical output surface WIDE RANGE for vignetting
-lensName{end+1}='wideangle200deg-edge-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/wideangle200deg-primarywl1-2.1mm.txt';
-offset_sensorside{end+1}=2.1;
-offset_objectside{end+1}=2; %%mm
-lensThickness{end+1}=14.19057;
-disable_dz_polynomial{end+1}=false;
-polynomialDegrees{end+1}=[6];  
+% %% EDGE Wide angle lens 200deg  with spherical output surface WIDE RANGE for vignetting
+% lensName{end+1}='wideangle200deg-edge-zemax'
+% zemaxDataFile{end+1}='./data/zemaxraytrace/wideangle200deg-primarywl1-2.1mm.txt';
+% offset_sensorside{end+1}=2.1;
+% offset_objectside{end+1}=2; %%mm
+% lensThickness{end+1}=14.19057;
+% disable_dz_polynomial{end+1}=false;
+% polynomialDegrees{end+1}=[6];  
 
 
 %% Wide angle lens 200deg  with spherical output surface WIDE RANGE for vignetting
@@ -38,7 +38,7 @@ offset_sensorside{end+1}=2.003;
 offset_objectside{end+1}=2; %%mm
 lensThickness{end+1}=14.19057;
 disable_dz_polynomial{end+1}=false;
-polynomialDegrees{end+1}=[1:13];  
+polynomialDegrees{end+1}=[1:15];  
 
 %%
 
@@ -51,7 +51,36 @@ offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=75.67388;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:7];  
+polynomialDegrees{end+1}=[1:15];  
+
+
+
+%% Double gauss 28deg lens 
+lensName{end+1}='dgauss28deg-nosparsity-zemax'
+zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg.txt';
+offset_sensorside{end+1}=0.01;
+offset_objectside{end+1}=0.01; %%mm
+lensThickness{end+1}=75.67388;
+disable_dz_polynomial{end+1}=true;
+polynomialDegrees{end+1}=[1:8];  
+
+
+%% Double gauss 28deg lens 
+lensName{end+1}='dgauss28deg-offset0-zemax'
+zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg-offset0.txt';
+%zemaxDataFile{end+1}='/scratch/thomas42/Downloads/dgauss28deg_primarywl1(1).txt';
+offset_sensorside{end+1}=0.0;
+offset_objectside{end+1}=0.0; %%mm
+lensThickness{end+1}=75.67388;
+disable_dz_polynomial{end+1}=true;
+polynomialDegrees{end+1}=[1:8];  
+
+
+%%
+
+
+
+
 
 %%
 
@@ -64,7 +93,7 @@ offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=143.88312;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:8];  
+polynomialDegrees{end+1}=[1:15];  
 
 
 
@@ -79,7 +108,7 @@ offset_sensorside{end+1}=5;
 offset_objectside{end+1}=5; %%mm
 lensThickness{end+1}=143.88312;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:12];  
+polynomialDegrees{end+1}=[1:15];  
 %%
 
 %%% Tessar lens
@@ -89,17 +118,20 @@ offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=16.4;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:13];  
+polynomialDegrees{end+1}=[1:15];  
 
 
-%%%% Cooke 40deg
+%% Cooke 40deg
 lensName{end+1}='cooke40deg-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/cooke40deg-primaryWL1.txt';
 offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=17.96897;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:12];  
+polynomialDegrees{end+1}=[1:15];  
+
+
+
 
 
 
@@ -111,7 +143,7 @@ offset_sensorside{end+1}=0.1;
 offset_objectside{end+1}=0.1; %%mm
 lensThickness{end+1}=1.30140;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:12];  
+polynomialDegrees{end+1}=[1:15];  
 
 
 % %% Double gauss 28deg lens 
@@ -168,12 +200,13 @@ for i=1:numel(lensName)
     end
     
     % Generate RTF for multiple polynomial degrees
+
     for polyDeg = polynomialDegrees{i}
         rtfName = [lensName{i} '-poly' num2str(polyDeg) '-raytransfer'];
         disp(['RTF Generation: ' rtfName])
         rtf=generateRTFfromIO(lensName{i},rtfName,iRays,oRays,offset_sensorside{i},offset_objectside{i},lensThickness{i},...
-            'outputdir',outputDir,'visualize',true,'polynomialdegree',polyDeg,...
-            'intersectionplanedistance',17);
+            'outputdir',outputDir,'visualize',false,'polynomialdegree',polyDeg,...
+            'raypassplanedistance',17,'sparsitytolerance',0);
         % Intersection plane sdistance  is the distance fron the input
         % plane to the plane where the raypass function (ellipses) are
         % calculated. This is an arbitrary choice.
