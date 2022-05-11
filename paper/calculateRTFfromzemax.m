@@ -35,18 +35,6 @@ lensThickness{end+1}=14.19057;
 disable_dz_polynomial{end+1}=false;
 polynomialDegrees{end+1}=[1:15];  
 
-%%
-
-
-%%%% Double gauss 28deg lens 
-lensName{end+1}='dgauss28deg-offset0.01-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg.txt';
-offset_sensorside{end+1}=0.01;
-offset_objectside{end+1}=0.01; %%mm
-lensThickness{end+1}=75.67388;
-disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:16];  
-
 
 
 %% Double gauss 28deg lens 
@@ -59,24 +47,8 @@ disable_dz_polynomial{end+1}=true;
 polynomialDegrees{end+1}=[1:16];  
 
 
-%%
 
 
-
-
-
-%%
-
-%%%% Petzval
-lensName{end+1}='petzval-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/petzval_primarywl1.txt';
-
-
-offset_sensorside{end+1}=0.01;
-offset_objectside{end+1}=0.01; %%mm
-lensThickness{end+1}=143.88312;
-disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:16];  
 
 
 
@@ -92,16 +64,8 @@ offset_objectside{end+1}=5; %%mm
 lensThickness{end+1}=143.88312;
 disable_dz_polynomial{end+1}=true;
 polynomialDegrees{end+1}=[1:16];  
-%%
 
-%% Tessar lens
-lensName{end+1}='tessar-offset0.01-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/tessar-rayaim-novignetfactors.txt';
-offset_sensorside{end+1}=0.01;
-offset_objectside{end+1}=0.01; %%mm
-lensThickness{end+1}=16.4;
-disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:16];  
+
 
 
 %% Tessar lens
@@ -114,14 +78,6 @@ disable_dz_polynomial{end+1}=true;
 polynomialDegrees{end+1}=[8];  
 
 
-%% Cooke 40deg
-lensName{end+1}='cooke40deg-offset0.01-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/cooke40deg-primaryWL1.txt';
-offset_sensorside{end+1}=0.01;
-offset_objectside{end+1}=0.01; %%mm
-lensThickness{end+1}=17.96897;
-disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:16];  
 
 
 %% Cooke 40deg input0
@@ -135,14 +91,6 @@ polynomialDegrees{end+1}=[1:16];
 
 
 
-%% Inversetelephoto
-lensName{end+1}='inversetelephoto-offset0.1-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/inversetelephoto_primarywl1.txt';
-offset_sensorside{end+1}=0.1;
-offset_objectside{end+1}=0.1; %%mm
-lensThickness{end+1}=1.30140;
-disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:16];  
 
 
 
