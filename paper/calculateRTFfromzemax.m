@@ -1,4 +1,8 @@
 %% Generate all ray transfer functions using txt file from ZEMAX macro
+%%
+%% Unzip the archive in isetrtf/paper/data/zemaxraytrace/ before running this script
+
+%%
 % 2022 Thomas Goossens
 
 clear; close all;
@@ -21,15 +25,6 @@ polynomialDegrees={};% Polynomial degrees to fit for this lens
 
 
 
-% %% EDGE Wide angle lens 200deg  with spherical output surface WIDE RANGE for vignetting
-% lensName{end+1}='wideangle200deg-edge-zemax'
-% zemaxDataFile{end+1}='./data/zemaxraytrace/wideangle200deg-primarywl1-2.1mm.txt';
-% offset_sensorside{end+1}=2.1;
-% offset_objectside{end+1}=2; %%mm
-% lensThickness{end+1}=14.19057;
-% disable_dz_polynomial{end+1}=false;
-% polynomialDegrees{end+1}=[6];  
-
 
 %% Wide angle lens 200deg  with spherical output surface WIDE RANGE for vignetting
 lensName{end+1}='wideangle200deg-circle-zemax'
@@ -46,7 +41,6 @@ polynomialDegrees{end+1}=[1:15];
 %%%% Double gauss 28deg lens 
 lensName{end+1}='dgauss28deg-offset0.01-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg.txt';
-%zemaxDataFile{end+1}='/scratch/thomas42/Downloads/dgauss28deg_primarywl1(1).txt';
 offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=75.67388;
@@ -58,7 +52,6 @@ polynomialDegrees{end+1}=[1:16];
 %% Double gauss 28deg lens 
 lensName{end+1}='dgauss28deg-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg-offset0.txt';
-%zemaxDataFile{end+1}='/scratch/thomas42/Downloads/dgauss28deg_primarywl1(1).txt';
 offset_sensorside{end+1}=0.0;
 offset_objectside{end+1}=0.0; %%mm
 lensThickness{end+1}=75.67388;
@@ -162,24 +155,6 @@ lensThickness{end+1}=1.30140;
 disable_dz_polynomial{end+1}=true;
 polynomialDegrees{end+1}=[1:16];  
 
-
-% %% Double gauss 28deg lens 
-% lensName{end+1}='dgauss28deg-zemax'
-% zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg.txt';
-% offset_sensorside{end+1}=0.01;
-% offset_objectside{end+1}=0.01; %%mm
-% lensThickness{end+1}=75.67388;
-% disable_dz_polynomial{end+1}=true;
-% polynomialDegrees{end+1}=[1:7];  
-
-% %% Wide angle lens 200deg  with spherical output surface
-% lensName{end+1}='wideangle200deg-circle-zemax'
-% zemaxDataFile{end+1}='./data/zemaxraytrace/wideangle200deg-primaryWL1.txt';
-% offset_sensorside{end+1}=2.003;
-% offset_objectside{end+1}=2; %%mm
-% lensThickness{end+1}=14.19057;
-% disable_dz_polynomial{end+1}=false;
-% polynomialDegrees{end+1}=[2:13];  
 
 
 
