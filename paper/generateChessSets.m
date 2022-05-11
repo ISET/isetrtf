@@ -8,10 +8,13 @@ if ~piDockerExists, piDockerConfig; end
 config={};
 
 
-% Colors
-colorpass = [0 49 90]/100;    
-color2 = [0.83 0 0];
-colors=[colorpass;color2];
+% Colors for plottinng
+colors=[0 0.49 0.90;0.83 0 0];
+
+
+
+%% RTF DEFINITIONS 
+% Below are listed all configurations to be simulated
 %%
 i=numel(config)+1;
 config{i}.name='tessar';
@@ -38,8 +41,9 @@ config{i}.filmresolution=600;
 config{i}.raysperpixel=1000;
 config{i}.omni_aperturediameter_mm=2*0.62000000;
 config{i}.hline = 0.66; % proportion of filmresolution
-config{i}.cameraposition = -0.3; % Camera position
-
+ %From/to % Camera position Offset because else the horizontal line goes
+ %through a bright window which obscures all the other details
+config{i}.cameraposition = [0 0.07 -0.3; 0.35 0.07 0.5];
 
 
 %%
@@ -83,6 +87,19 @@ config{i}.raysperpixel=1000;
 config{i}.omni_aperturediameter_mm=2*10.229;
 config{i}.hline = 0.5; % proportion of filmresolution
 
+
+%% 
+i=numel(config)+1;
+config{i}.name='dgauss28deg-offset0';
+config{i}.lensfile='dgauss.28deg-zemax.json';
+config{i}.filmdistance_mm=80;
+config{i}.rtffile= 'dgauss28deg-offset0-zemax-poly7-raytransfer.json';
+config{i}.sensordiagonal_mm=150;  % original 100
+config{i}.filmresolution=600;
+config{i}.raysperpixel=1000;
+%config{i}.raysperpixel=300;
+config{i}.omni_aperturediameter_mm=2*10.229;
+config{i}.hline = 0.5; % proportion of filmresolution
 % 
 % %%
 % i=numel(config)+1;
@@ -120,11 +137,12 @@ thisR=piRecipeDefault('scenename','chess set')
 thisDocker = 'vistalab/pbrt-v3-spectral:latest';
 
 
-    if(isfield(c,'cameraposition'))
+    if(isfield(c,'cameraposition')) % WHen given, move the default camera
     % Set camera and camera position
-    filmZPos_m           = c.cameraposition;
-    thisR.lookAt.from(3)= filmZPos_m
+    thisR.lookAt.from= c.cameraposition(1,:);
+    thisR.lookAt.to= c.cameraposition(2,:);
     end
+    
     
 % Define cameras
 sensordiagonal_mm=c.sensordiagonal_mm;
@@ -251,29 +269,10 @@ exportgraphics(gca,['./fig/chess/chessSet-hline-' c.name '.png']);
 
 
 
-% Calculate relative error histogram
-
 
 end
 
 
-%%
 
-%% Generate plots
-figure;
-for ic=1:numel(config)
-    c=config{ic};
-oiList={oiOmni{ic} oiRTF{ic} }
- 
- oi=oiList{1};  A=oi.data.photons(:);
- oi=oiList{2};  B=oi.data.photons(:);
- relerr(:,ic) = A/max(A)-B/max(B);
-
-end
-
-boxplot(relerr)
-
-%%
-ylim([-1 1]*1e-2)
 
  

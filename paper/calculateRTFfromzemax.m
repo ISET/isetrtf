@@ -2,8 +2,8 @@
 % 2022 Thomas Goossens
 
 clear; close all;
-outputDir = fullfile(piRootPath, 'data/lens/RTF');
-%outputDir = fullfile('data/rtf/');
+%outputDir = fullfile(piRootPath, 'data/lens/RTF');
+outputDir = fullfile('data/rtf/');
 
 
 % Configuration variables 
@@ -44,36 +44,26 @@ polynomialDegrees{end+1}=[1:15];
 
 
 %%%% Double gauss 28deg lens 
-lensName{end+1}='dgauss28deg-zemax'
+lensName{end+1}='dgauss28deg-offset0.01-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg.txt';
 %zemaxDataFile{end+1}='/scratch/thomas42/Downloads/dgauss28deg_primarywl1(1).txt';
 offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=75.67388;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:15];  
+polynomialDegrees{end+1}=[1:16];  
 
 
 
 %% Double gauss 28deg lens 
-lensName{end+1}='dgauss28deg-nosparsity-zemax'
-zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg.txt';
-offset_sensorside{end+1}=0.01;
-offset_objectside{end+1}=0.01; %%mm
-lensThickness{end+1}=75.67388;
-disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:8];  
-
-
-%% Double gauss 28deg lens 
-lensName{end+1}='dgauss28deg-offset0-zemax'
+lensName{end+1}='dgauss28deg-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/dgauss28deg-offset0.txt';
 %zemaxDataFile{end+1}='/scratch/thomas42/Downloads/dgauss28deg_primarywl1(1).txt';
 offset_sensorside{end+1}=0.0;
 offset_objectside{end+1}=0.0; %%mm
 lensThickness{end+1}=75.67388;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:8];  
+polynomialDegrees{end+1}=[1:16];  
 
 
 %%
@@ -93,7 +83,7 @@ offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=143.88312;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:15];  
+polynomialDegrees{end+1}=[1:16];  
 
 
 
@@ -108,42 +98,69 @@ offset_sensorside{end+1}=5;
 offset_objectside{end+1}=5; %%mm
 lensThickness{end+1}=143.88312;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:15];  
+polynomialDegrees{end+1}=[1:16];  
 %%
 
-%%% Tessar lens
-lensName{end+1}='tessar-zemax'
+%% Tessar lens
+lensName{end+1}='tessar-offset0.01-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/tessar-rayaim-novignetfactors.txt';
 offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=16.4;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:15];  
+polynomialDegrees{end+1}=[1:16];  
+
+
+%% Tessar lens
+lensName{end+1}='tessar-zemax'
+zemaxDataFile{end+1}='./data/zemaxraytrace/tessar-offset0.txt';
+offset_sensorside{end+1}=0.0;
+offset_objectside{end+1}=0.0; %%mm
+lensThickness{end+1}=16.4;
+disable_dz_polynomial{end+1}=true;
+polynomialDegrees{end+1}=[8];  
 
 
 %% Cooke 40deg
-lensName{end+1}='cooke40deg-zemax'
+lensName{end+1}='cooke40deg-offset0.01-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/cooke40deg-primaryWL1.txt';
 offset_sensorside{end+1}=0.01;
 offset_objectside{end+1}=0.01; %%mm
 lensThickness{end+1}=17.96897;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:15];  
+polynomialDegrees{end+1}=[1:16];  
 
 
-
-
+%% Cooke 40deg input0
+lensName{end+1}='cooke40deg-zemax'
+zemaxDataFile{end+1}='./data/zemaxraytrace/cooke40deg-offset0.txt';
+offset_sensorside{end+1}=0.0;
+offset_objectside{end+1}=0.0; %%mm
+lensThickness{end+1}=17.96897;
+disable_dz_polynomial{end+1}=true;
+polynomialDegrees{end+1}=[1:16];  
 
 
 
 %% Inversetelephoto
-lensName{end+1}='inversetelephoto-zemax'
+lensName{end+1}='inversetelephoto-offset0.1-zemax'
 zemaxDataFile{end+1}='./data/zemaxraytrace/inversetelephoto_primarywl1.txt';
 offset_sensorside{end+1}=0.1;
 offset_objectside{end+1}=0.1; %%mm
 lensThickness{end+1}=1.30140;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[1:15];  
+polynomialDegrees{end+1}=[1:16];  
+
+
+
+%% Inversetelephoto
+lensName{end+1}='inversetelephoto-zemax'
+zemaxDataFile{end+1}='./data/zemaxraytrace/inversetelephoto-offset0.txt';
+offset_sensorside{end+1}=0;
+offset_objectside{end+1}=0; %%mm
+lensThickness{end+1}=1.30140;
+disable_dz_polynomial{end+1}=true;
+polynomialDegrees{end+1}=[1:16];  
 
 
 % %% Double gauss 28deg lens 
@@ -201,7 +218,7 @@ for i=1:numel(lensName)
     
     % Generate RTF for multiple polynomial degrees
 
-    for polyDeg = polynomialDegrees{i}
+    for polyDeg = 1:numel(polynomialDegrees)
         rtfName = [lensName{i} '-poly' num2str(polyDeg) '-raytransfer'];
         disp(['RTF Generation: ' rtfName])
         rtf=generateRTFfromIO(lensName{i},rtfName,iRays,oRays,offset_sensorside{i},offset_objectside{i},lensThickness{i},...

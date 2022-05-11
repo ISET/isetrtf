@@ -30,21 +30,6 @@ config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
 
 
-%%
-
-
-% 
-% config{end+1}=[]
-% config{end}.rtfname='petzval-zemax';
-% config{end}.distances = [3000 3500];
-% config{end}.filmdistance_mm=18.667;
-% config{end}.filmdiagonal_mm=2*45/100;
-% config{end}.degrees=[1:12];
-% config{end}.rays=5000;
-% config{end}.resolution=4000;
-% config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
-
-
 %% Wide angle lens with smaller image circle - converges already for polynomial degree 5
 config{end+1}=[]
 config{end}.rtfname='wideangle200deg-limitcircle-zemax';
@@ -71,29 +56,19 @@ config{end}.rays=5000;
 config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-inversetelephoto.mat';
 
+
+
+
 %%
 config{end+1}=[]
 config{end}.rtfname='dgauss28deg-zemax';
 config{end}.distances = [1000 1200]
 config{end}.filmdistance_mm=67.768;
 config{end}.filmdiagonal_mm=150/100;
-config{end}.degrees=[1:8]; % Polynomial degrees to try
+config{end}.degrees=[1:16]; % Polynomial degrees to try
 config{end}.rays=4000;
 config{end}.resolution=1000;
 config{end}.zemaxfileESF='data/ESF/esf-dgauss28deg.mat';
-
-
-%%
-config{end+1}=[]
-config{end}.rtfname='dgauss28deg-offset0-zemax';
-config{end}.distances = [1000 1200]
-config{end}.filmdistance_mm=67.768;
-config{end}.filmdiagonal_mm=150/100;
-config{end}.degrees=[1:8]; % Polynomial degrees to try
-config{end}.rays=4000;
-config{end}.resolution=1000;
-config{end}.zemaxfileESF='data/ESF/esf-dgauss28deg.mat';
-
 
 
 
@@ -126,6 +101,9 @@ config{end}.zemaxfileESF='data/ESF/esf-tessar.mat';
 
 
 
+
+
+
 %%
 config{end+1}=[]
 config{end}.rtfname='cooke40deg-zemax';
@@ -134,9 +112,9 @@ config{end}.filmdistance_mm=51.915;
 config{end}.filmdiagonal_mm=2.4;
 config{end}.degrees=[1:16];
 config{end}.rays=2000;
-%config{end}.rays=10000;
 config{end}.resolution=1000;
 config{end}.zemaxfileESF='data/ESF/esf-cooke40deg.mat';
+
 
 
 
@@ -157,7 +135,7 @@ for i=1:numel(config)
 
 end
 
-%load ./data/tmp/dataESF-1to16deg.mat
+%save ./data/tmp/dataESF-1to16deg.mat % Save data for later use
 
 % Play glorious soud when ready
 load handel;sound(y,Fs);
@@ -177,51 +155,39 @@ for i=1:numel(config)
     plotESFerror(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},noisefloor{i},esfZemax)
     set(gca,'Yscale','linear')
     ylim([0 0.5])
-    
-    %exportgraphics(gcf,['./fig/ESF/esf-error-' c.rtfname '.pdf'])
-    
-      if(c.rtfname == "dgauss28deg-zemax")
-       % Add label for rendering noise level
-       %text(1.1,1.8e-3,sprintf('RMS Rendering Noise'),'interpreter','latex','fontsize',8.5)
-      end
-      xlim([1 max(c.degrees)])
-      xlim([ 1 16])
-      
-%    exportgraphics(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.pdf'])
+    xlim([ 1 16])    
+          
+
     saveas(gcf,['./fig/ESF/esf-error-' c.rtfname '.png'])
 
         
 end
 
 
-%% Make Plots ESF 
+%% Make Plots ESF Vs zemax
 
 for i=1:numel(config)
     c=config{i};
     
     
     disp(['Generate ESF Plots for ' c.rtfname])
-
+    aaaz
     % Load Zemax ESF File
     esfZemax= load(c.zemaxfileESF);esfZemax=esfZemax.lsf;
-
+    
     % Plots
     figure(i);clf; hold on
     
     % Only add legend for double gauss lens
     addzemaxtolegend= false;
     if(c.rtfname=="dgauss28deg-zemax"),    addzemaxtolegend= true;        end
-   
-
+    
+    
     plotESF(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},esfZemax,addzemaxtolegend)
     
-  
-        
-
-    %if(i==4)        xlim([-100 100]),    end
-    if(i>6)        xlim([-800 800]),    end
+    
     exportgraphics(gcf,['./fig/ESF/esf-' c.rtfname '.png'])
     
-  
+    
 end
 

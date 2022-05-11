@@ -4,7 +4,7 @@
 % Thomas Goossens
 
 clear; close all
-
+addpath(genpath(irtfRootPath))
 
 config={};
 
@@ -18,8 +18,32 @@ config{i}.filmresolution=[900 1];
 config{i}.rtffile = 'dgauss28deg-zemax-poly6-raytransfer.json';
 config{i}.zemaxfile='./data/relativeillumination-pbrt/dgauss28deg-comparison.mat';
 
+
+%% Lens configurations
+i=numel(config)+1;
+config{i}.name='dgauss28deg-offset0.01';
+config{i}.filmdistance_mm=57.315;
+config{i}.sensordiagonal_mm=110;
+config{i}.pixelsamples=2000;
+config{i}.filmresolution=[900 1];
+config{i}.rtffile = 'dgauss28deg-offset0.01-zemax-poly6-raytransfer.json';
+config{i}.zemaxfile='./data/relativeillumination-pbrt/dgauss28deg-comparison.mat';
+
+
+
+%%
 i=numel(config)+1;
 config{i}.name='inversetelephoto';
+config{i}.filmdistance_mm=1.5;
+config{i}.sensordiagonal_mm=1.5*2;
+config{i}.pixelsamples=2000;
+config{i}.filmresolution=[900 1];
+config{i}.rtffile = 'inversetelephoto-offset0.1-zemax-poly6-raytransfer.json';
+config{i}.zemaxfile='./data/relativeillumination-pbrt/inversetelephoto-comparison.mat';
+
+%%
+i=numel(config)+1;
+config{i}.name='inversetelephoto-offset0.1';
 config{i}.filmdistance_mm=1.5;
 config{i}.sensordiagonal_mm=1.5*2;
 config{i}.pixelsamples=2000;
@@ -67,22 +91,15 @@ config{i}.zemaxfile='./data/relativeillumination-pbrt/cooke40deg-comparison.mat'
 
 %% 
 i=numel(config)+1;
-config{i}.name= 'cooke40deg-moredata';
+config{i}.name= 'cooke40deg-offset0.01';
 config{i}.filmdistance_mm=50;
 config{i}.sensordiagonal_mm=42*2;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
-config{i}.rtffile = 'cooke40deg-moredata-zemax-poly9-raytransfer.json';
+config{i}.rtffile = 'cooke40deg-offset0.01-zemax-poly9-raytransfer.json';
 config{i}.zemaxfile='./data/relativeillumination-pbrt/cooke40deg-comparison.mat';
+
 %% 
-i=numel(config)+1;
-config{i}.name= 'cooke40deg-circles';
-config{i}.filmdistance_mm=50;
-config{i}.sensordiagonal_mm=42*2;
-config{i}.pixelsamples=2000;
-config{i}.filmresolution=[900 1];
-config{i}.rtffile = 'cooke40deg-zemax-poly12-circles-raytransfer.json';
-config{i}.zemaxfile='./data/relativeillumination-pbrt/cooke40deg-comparison.mat';
 %%
 i=numel(config)+1;
 config{i}.name= 'tessar'; 
@@ -92,6 +109,18 @@ config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
 config{i}.rtffile = 'tessar-zemax-poly6-raytransfer.json';
 config{i}.zemaxfile='./data/relativeillumination-pbrt/tessar-comparison.mat';
+%%
+i=numel(config)+1;
+config{i}.name= 'tessar-offset0.01'; 
+config{i}.filmdistance_mm=100;
+config{i}.sensordiagonal_mm=100*2;
+config{i}.pixelsamples=2000;
+config{i}.filmresolution=[900 1];
+config{i}.rtffile = 'tessar-offset0.01-zemax-poly6-raytransfer.json';
+config{i}.zemaxfile='./data/relativeillumination-pbrt/tessar-comparison.mat';
+
+
+
 %%
 
 i=numel(config)+1;
@@ -130,7 +159,9 @@ thisDocker = 'vistalab/pbrt-v3-spectral:latest';
 
 
 
-    cameraRTF = piCameraCreate('raytransfer','lensfile',c.rtffile);
+%    cameraRTF = piCameraCreate('raytransfer','lensfile',fullfile(irtfRootPath,'paper','data','rtf',c.name,c.rtffile));
+    
+cameraRTF = piCameraCreate('raytransfer','lensfile',which(c.rtffile));    
     cameraRTF.filmdistance.value=c.filmdistance_mm/1000;
     thisR.set('camera',cameraRTF);
 
