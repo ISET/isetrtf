@@ -11,8 +11,8 @@ lensFileName= 'cooke40deg';
 lensThickness=17.96897;
 
 % Input and output plane offsets
-offset_output=0.01;%mm
-offset_input=0.01;% mm
+offset_output=0.0;%mm
+offset_input=0.0;% mm
 
 
 %% Calculate position of the input plane assuming z=0 at the surfcace closest to the scene.
@@ -25,7 +25,7 @@ raypassplane_distancefrominput_mm=  17;
 
 
 %% Load the rays obtained using the zemax macro for the petzval lens.
-file='./data/zemaxraytrace/cooke40deg-primaryWL1.txt';
+file='./data/zemaxraytrace/cooke40deg-offset0.txt';
 
 % Note to user: It turns out the circles vary more smoothly when placing the inputoutput planes at an
 % offset of 5 mm instead of 0.01 mm. This makes it easier to find the
@@ -100,7 +100,7 @@ offaxis_distances=positions(position_selection);
 pupils=pupilshapeOnRayPassPlane(1:2,position_selection,:)
 
 % Tuning parameters
-offset=0.05;stepsize_radius=0.01;
+offset=0.05;stepsize_radius=0.1;
 
 % Find radius and sensitivity of the tangent circle on the top ( where it
 % cuts)
