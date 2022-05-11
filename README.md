@@ -3,9 +3,9 @@
 
 Repository for software to support the analyses in the paper on ray transfer functions
 <div>
-<img src="./paper/fig/drawings/rtf-matrix.pdf-1.png" alt="RTF" width="33%" >
-<img src="./paper/fig/drawings/rtf-function.pdf-1.png" alt="RTF" width="33%" >
-<img src="./paper/fig/drawings/rtf-surface.pdf-1.png" alt="RTF" width="33%" >
+<img src="./paper/fig/drawings/rtf-matrix.pdf-1.png" alt="RTF" width="30%" >
+<img src="./paper/fig/drawings/rtf-function.pdf-1.png" alt="RTF" width="30%" >
+<img src="./paper/fig/drawings/rtf-surface.pdf-1.png" alt="RTF" width="30%" >
 </div>
 
 
