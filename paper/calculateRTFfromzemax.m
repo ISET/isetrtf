@@ -1,12 +1,14 @@
 %% Generate all ray transfer functions using txt file from ZEMAX macro
-%%
-%% Unzip the archive in isetrtf/paper/data/zemaxraytrace/ before running this script
-
-%%
+% This script generates rtf json files in data/rtf from the dataset
+% obtained using the zemax macro. The zemax dataset is found in
+% data/zemaxraytrace.
+% On Github the data is uploaded as a zipped archive.
+% Unzip the archive in isetrtf/paper/data/zemaxraytrace/ before running this script
+%
 % 2022 Thomas Goossens
 
+%%
 clear; close all;
-%outputDir = fullfile(piRootPath, 'data/lens/RTF');
 outputDir = fullfile('data/rtf/');
 
 
@@ -56,9 +58,7 @@ polynomialDegrees{end+1}=[1:16];
 
 %%%% Petzval 5mm planes
 lensName{end+1}='petzval-5mminput-zemax'
-%zemaxDataFile{end+1}='./data/zemaxraytrace/petzval-primaryWL1.txt';
 zemaxDataFile{end+1}='./data/zemaxraytrace/petzval_primarywl1_5mminput.txt';
-
 offset_sensorside{end+1}=5;
 offset_objectside{end+1}=5; %%mm
 lensThickness{end+1}=143.88312;
@@ -147,7 +147,7 @@ for i=1:numel(lensName)
         rtf=generateRTFfromIO(lensName{i},rtfName,iRays,oRays,offset_sensorside{i},offset_objectside{i},lensThickness{i},...
             'outputdir',outputDir,'visualize',false,'polynomialdegree',polyDeg,...
             'raypassplanedistance',17,'sparsitytolerance',0);
-        % Intersection plane sdistance  is the distance fron the input
+        % Intersection plane distance  is the distance fron the input
         % plane to the plane where the raypass function (ellipses) are
         % calculated. This is an arbitrary choice.
     end

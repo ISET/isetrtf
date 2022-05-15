@@ -1,4 +1,9 @@
 %% Compare rendered chess set scene for known lens and its corresponding RTF.
+% This script renders a chess set scenes for a collection of lenses.  The
+% scene is rendered for both the exact lens model and using a ray-transfer
+% function.
+
+
 
 ieInit
 if ~piDockerExists, piDockerConfig; end
@@ -15,6 +20,10 @@ colors=[0 0.49 0.90;0.83 0 0];
 
 %% RTF DEFINITIONS 
 % Below are listed all configurations to be simulated
+% config is a cell array containing structs representing the configuration
+% for a particular simulation.
+% You can either run the script as a whole, or only add the lenses you want
+% to simulate
 %%
 i=numel(config)+1;
 config{i}.name='tessar';

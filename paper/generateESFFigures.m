@@ -1,13 +1,17 @@
 %% Generate all figures related to Edge Spread Functions
 %
 % This script is an integration test for our RTF implementation in PBRT. 
-% We do this by calculating the edge spread functions (ESF) (on-axis) for several
-% depths. These ESF functions are compared to the ESF obtained with the
-% ZEMAX model. In all cases, for high enough polynomial degree, a near
-% perfect match is obtained.
-%
+% We do this by calculating the edge spread functions (ESF) (on-axis) for two distances
+% of a step function chart. These ESF functions are compared to the ESF obtained with the
+% ZEMAX model using zemax. In all cases, for high enough polynomial degree, a a good match is obtained.
+% 
+% We choose a high number of pixels (4000) to achieve submicron resolution and high number of rays per
+% pixel (20000) to minimze the contribution of rendering noise.
+% This is possible in reasonable amount of time because this script renders the scene for only one row
+% of pixels.
 % Thomas Goossens
-% January 2022
+% May 2022
+
 clear; close all
 ieInit;
 config={};
@@ -25,7 +29,7 @@ config{end}.distances = [3000 3500];
 config{end}.filmdistance_mm=18.667;
 config{end}.filmdiagonal_mm=2*45/100;
 config{end}.degrees=[1:16];
-config{end}.rays=5000;
+config{end}.rays=20000;
 config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-petzval.mat';
 
@@ -37,8 +41,8 @@ config{end}.distances = [3000 100]; % Distance of object as measured from lens f
 config{end}.filmdistance_mm=2.010; % Distance of sensor from rear vertex
 config{end}.filmdiagonal_mm=2*1.23/100; 
 config{end}.degrees=[1:12];
-config{end}.rays=2000; % Number of rays per film pixel to trace
-config{end}.resolution=2000; % Number of pixels (horizontally)
+config{end}.rays=20000; % Number of rays per film pixel to trace
+config{end}.resolution=4000; % Number of pixels (horizontally)
 config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
 
 
@@ -52,7 +56,7 @@ config{end}.distances = [3000 40];
 config{end}.filmdistance_mm=1.195;
 config{end}.filmdiagonal_mm=2*2/100;
 config{end}.degrees=[1:16];
-config{end}.rays=5000;
+config{end}.rays=20000;
 config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-inversetelephoto.mat';
 
@@ -66,8 +70,8 @@ config{end}.distances = [1000 1200]
 config{end}.filmdistance_mm=67.768;
 config{end}.filmdiagonal_mm=150/100;
 config{end}.degrees=[1:16]; % Polynomial degrees to try
-config{end}.rays=4000;
-config{end}.resolution=1000;
+config{end}.rays=20000;
+config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-dgauss28deg.mat';
 
 
@@ -79,8 +83,8 @@ config{end}.distances = [3000 100]; % Distance of object as measured from lens f
 config{end}.filmdistance_mm=2.010; % Distance of sensor from rear vertex
 config{end}.filmdiagonal_mm=2*1.23/100; 
 config{end}.degrees=[1:16]; % Polynomial degrees to try
-config{end}.rays=5000; % Number of rays per film pixel to trace
-config{end}.resolution=2000; % Number of pixels (horizontally)
+config{end}.rays=20000; % Number of rays per film pixel to trace
+config{end}.resolution=4000; % Number of pixels (horizontally)
 config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
 
 
@@ -95,8 +99,8 @@ config{end}.distances = [1267.384 2000]
 config{end}.filmdistance_mm=100;
 config{end}.filmdiagonal_mm=2*50.5/100;
 config{end}.degrees=[1:16];
-config{end}.rays=2000;
-config{end}.resolution=1000;
+config{end}.rays=20000;
+config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-tessar.mat';
 
 
@@ -111,8 +115,8 @@ config{end}.distances = [300 500]
 config{end}.filmdistance_mm=51.915;
 config{end}.filmdiagonal_mm=2.4;
 config{end}.degrees=[1:16];
-config{end}.rays=2000;
-config{end}.resolution=1000;
+config{end}.rays=20000;
+config{end}.resolution=4000;
 config{end}.zemaxfileESF='data/ESF/esf-cooke40deg.mat';
 
 
@@ -123,6 +127,7 @@ config{end}.zemaxfileESF='data/ESF/esf-cooke40deg.mat';
 %% Calculate ESF
 for i=1:numel(config)
     c=config{i};
+    
     disp(['Generate ESF for ' c.rtfname])
     [esf,pixels,noisefloorTemp]=calculateESF('rtfName',c.rtfname,'distances',c.distances,...
         'filmdistance',c.filmdistance_mm,'filmdiagonal',c.filmdiagonal_mm,...
@@ -153,11 +158,13 @@ for i=1:numel(config)
     fig=figure(i);clf;
     set(gca,'Yscale','log')
     plotESFerror(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},noisefloor{i},esfZemax)
+    %set(gca,'Yscale','linear')
+    ylim([0 0.6])
+    xlim([1 16])    
+    %saveas(gcf,['./fig/ESF/esf-logerror-' c.rtfname '.png'])
+    
+    
     set(gca,'Yscale','linear')
-    ylim([0 0.5])
-    xlim([ 1 16])    
-          
-
     saveas(gcf,['./fig/ESF/esf-error-' c.rtfname '.png'])
 
         
@@ -171,7 +178,7 @@ for i=1:numel(config)
     
     
     disp(['Generate ESF Plots for ' c.rtfname])
-    aaaz
+
     % Load Zemax ESF File
     esfZemax= load(c.zemaxfileESF);esfZemax=esfZemax.lsf;
     

@@ -1,4 +1,9 @@
 %% Compare rendered horizontal line across chesset scene for known lens and its corresponding RTF.
+% This script renders a single pixel row of chess set scenes for a collection of lenses.  The
+% scene is rendered for both the exact lens model and using a ray-transfer
+% function.
+% Because we render only one pixel row we can set the number or rays per
+% pixel to 20000 to minimize rendering noise.
 
 
 ieInit
@@ -13,7 +18,8 @@ colors=[0 0.49 0.90;0.83 0 0];
 
 
 %% RTF DEFINITIONS 
-% Below are listed all configurations to be simulated
+% Below are listed all configurations to be simulated. Configurations are
+% saved in cell array of structs.
 %%
 i=numel(config)+1;
 config{i}.name='tessar';
@@ -22,7 +28,7 @@ config{i}.filmdistance_mm=160;
 config{i}.rtffile= 'tessar-zemax-poly13-raytransfer.json';
 config{i}.sensordiagonal_mm=450;
 config{i}.filmresolution=4000;
-config{i}.raysperpixel=2000;
+config{i}.raysperpixel=20000;
 config{i}.omni_aperturediameter_mm=2*8.111;
 config{i}.hline = 0.5; % proportion of filmresolution
 
@@ -36,7 +42,7 @@ config{i}.filmdistance_mm=2.004;
 config{i}.rtffile= 'wideangle200deg-circle-zemax-poly11-raytransfer.json';
 config{i}.sensordiagonal_mm=3;
 config{i}.filmresolution=4000;
-config{i}.raysperpixel=2000;
+config{i}.raysperpixel=20000;
 config{i}.omni_aperturediameter_mm=2*0.62000000;
 config{i}.hline = 0.66; % proportion of filmresolution
  %From/to % Camera position Offset because else the horizontal line goes
@@ -50,11 +56,10 @@ i=numel(config)+1;
 config{i}.name='petzval';
 config{i}.lensfile='petzval-zemax.json';
 config{i}.filmdistance_mm=45;
-config{i}.rtffile= 'petzval-5mminput-zemax-poly8-circles-raytransfer.json';
-%config{i}.rtffile= 'petzval-zemax-poly8-raytransfer.json';
+config{i}.rtffile= 'petzval-5mminput-zemax-poly12-circles-raytransfer.json';
 config{i}.sensordiagonal_mm=150;
 config{i}.filmresolution=4000;
-config{i}.raysperpixel=2000;
+config{i}.raysperpixel=20000;
 config{i}.omni_aperturediameter_mm=28*2;
 config{i}.hline = 0.5; % proportion of filmresolution
 
@@ -68,7 +73,7 @@ config{i}.rtffile= 'cooke40deg-zemax-poly12-raytransfer.json';
 config{i}.filmdistance_mm=50;
 config{i}.sensordiagonal_mm=100;
 config{i}.filmresolution=4000;
-config{i}.raysperpixel=2000;
+config{i}.raysperpixel=20000;
 config{i}.omni_aperturediameter_mm=2*5;
 config{i}.hline = 0.5; % proportion of filmresolution
 
@@ -80,10 +85,10 @@ i=numel(config)+1;
 config{i}.name='dgauss28deg';
 config{i}.lensfile='dgauss.28deg-zemax.json';
 config{i}.filmdistance_mm=80;
-config{i}.rtffile= 'dgauss28deg-zemax-poly7-raytransfer.json';
+config{i}.rtffile= 'dgauss28deg-zemax-poly8-raytransfer.json';
 config{i}.sensordiagonal_mm=150;  % original 100
 config{i}.filmresolution=4000;
-config{i}.raysperpixel=2000;
+config{i}.raysperpixel=20000;
 config{i}.omni_aperturediameter_mm=2*10.229;
 config{i}.hline = 0.5; % proportion of filmresolution
 
@@ -92,11 +97,11 @@ config{i}.hline = 0.5; % proportion of filmresolution
 i=numel(config)+1;
 config{i}.name='inversetelephoto';
 config{i}.lensfile='inversetelephoto-zemax.json';
-config{i}.rtffile= 'inversetelephoto-zemax-poly6-raytransfer.json';
+config{i}.rtffile= 'inversetelephoto-zemax-poly8-raytransfer.json';
 config{i}.filmdistance_mm=1.2;
 config{i}.sensordiagonal_mm=2.5;
 config{i}.filmresolution=4000;
-config{i}.raysperpixel=2000;
+config{i}.raysperpixel=20000;
 config{i}.omni_aperturediameter_mm=2*0.166;
 config{i}.hline = 0.5; % proportion of filmresolution
 
@@ -140,6 +145,7 @@ for ic=1:numel(config)
     
     % Rendering Options
 
+    c.raysperpixel = 20000;
     thisR.set('pixel samples',c.raysperpixel)
     thisR.set('film diagonal',c.sensordiagonal_mm,'mm');
     
@@ -233,8 +239,8 @@ for ic=1:numel(config)
     % ISET3D causes some rescaling of the number of photons for the RTF, so we first peak
     % normalize before comparing the error.
     maxnorm=@(x)x/max(x);
-    A=maxnorm(hline(:,1));
-    B=maxnorm(hline(:,2));
+    A=maxnorm(hline(1:end,1));
+    B=maxnorm(hline(1:end,2));
     RMS(ic) = rms(A-B)
     text(3400,0.9,sprintf('RMSE: %0.3f',RMS(ic)))
     

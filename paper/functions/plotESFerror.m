@@ -17,13 +17,17 @@ for i=1:numel(distances)
    edgeResampled=interp1(pixels,esfPBRT(:,d,i),pixelsZemax);
    ignoreNan = ~isnan(edgeResampled);
    ignoreZero= ~(edgeZemax==0);
-   %ignoreOne = ~(edgeZemax==1);
-   ignore = and(ignoreZero,ignoreNan);
+   ignoreOne = ~(edgeZemax==1);
+   ignore = and(ignoreOne,and(ignoreZero,ignoreNan));
 
    % To normalize the saturation value, given the possible presence of rendering noise,
    % we divide by the maxmimum of a smoothed ESF.
    N=10;
-   edgeIgnoreNan=edgeResampled(ignoreNan);
+   %Flip and sort to make sur we will use the N largest values for normalization.
+   % Because the ESF can become exactly zero, this avoids accidental
+   % divisions by zero
+   edgeIgnoreNan=flip(sort(edgeResampled(ignoreNan))); 
+   
    edgeResampled = edgeResampled/mean(edgeIgnoreNan(1:N)); % Smooth out some of the rendering noise to make the edge converge to one
       
    % Compare width of ESF
@@ -41,16 +45,19 @@ colorpassblue = [0 49 90]/100;
 color =[0.833 0 0 ; colorpassblue]
 for p=1:numel(distances)
     h(p)=plot(degrees,error(:,p),'linewidth',2,'color',color(p,:))
+   
     %line([degrees(1) degrees(end)],[renderNoiseFloor renderNoiseFloor],'color','k','linewidth',2,'linestyle','--')
    
 end
 xlabel('Polynomial Degree')
 ylabel('RMSE')
 %xticks(degrees([1:3:end-1 end]))
-
+xticks([1 6 11 16])
 % Figure styles
 box on
 
+text(10,0.25,[num2str(round(min(error(:))*100,2)) '%'])
+line([13 16],[0.2 min(error(end,:))],'color','k')
 
 
 %set(findall(gcf,'-property','FontSize'),'FontSize',10);
