@@ -27,6 +27,16 @@ polynomialDegrees={};% Polynomial degrees to fit for this lens
 
 
 
+%% Wide angle lens 200deg  with spherical output surface WIDE RANGE for vignetting
+lensName{end+1}='wideangle200deg-offset0-circle-zemax'
+zemaxDataFile{end+1}='./data/zemaxraytrace/wideangle200deg-offset0.txt';
+offset_sensorside{end+1}=0;
+offset_objectside{end+1}=2; %%mm
+lensThickness{end+1}=14.19057;
+disable_dz_polynomial{end+1}=false;
+polynomialDegrees{end+1}=[1:16];  
+
+
 
 %% Wide angle lens 200deg  with spherical output surface WIDE RANGE for vignetting
 lensName{end+1}='wideangle200deg-circle-zemax'
@@ -35,7 +45,7 @@ offset_sensorside{end+1}=2.003;
 offset_objectside{end+1}=2; %%mm
 lensThickness{end+1}=14.19057;
 disable_dz_polynomial{end+1}=false;
-polynomialDegrees{end+1}=[1:15];  
+polynomialDegrees{end+1}=[1:16];  
 
 
 
@@ -75,7 +85,7 @@ offset_sensorside{end+1}=0.0;
 offset_objectside{end+1}=0.0; %%mm
 lensThickness{end+1}=16.4;
 disable_dz_polynomial{end+1}=true;
-polynomialDegrees{end+1}=[8];  
+polynomialDegrees{end+1}=[1:16];  
 
 
 
@@ -141,7 +151,7 @@ for i=1:numel(lensName)
     
     % Generate RTF for multiple polynomial degrees
 
-    for polyDeg = 1:numel(polynomialDegrees)
+    for polyDeg = 1:numel(polynomialDegrees{i})
         rtfName = [lensName{i} '-poly' num2str(polyDeg) '-raytransfer'];
         disp(['RTF Generation: ' rtfName])
         rtf=generateRTFfromIO(lensName{i},rtfName,iRays,oRays,offset_sensorside{i},offset_objectside{i},lensThickness{i},...

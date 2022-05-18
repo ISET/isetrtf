@@ -56,7 +56,11 @@ xticks([1 6 11 16])
 % Figure styles
 box on
 
-text(10,0.25,[num2str(round(min(error(:))*100,2)) '%'])
+
+
+minerr = min(error(:));
+%text(10,0.25,[num2str(round(min(error(:))*100,2)) '%'])
+text(10,0.25, sprintf('%.0E',min(error(:))));
 line([13 16],[0.2 min(error(end,:))],'color','k')
 
 

@@ -9,6 +9,19 @@
 % pixel (20000) to minimze the contribution of rendering noise.
 % This is possible in reasonable amount of time because this script renders the scene for only one row
 % of pixels.
+%
+%
+% The difference between the ESF from zemax and the RTF is quantified using
+% RMSE. To do this, the RTF result is resampled first onto the same grid as
+% the zemax groundtruth. It is possible that some values cannot be
+% interpolated (and are hence extrapolated). This produces NANS which are
+% filtered. Before calculateing the RMSE we also filter out the region
+% where the zemax ESF is exactly zero. This is because this would skew the
+% RMSE error downwards depending on how long the zero region is taken. The
+% longer the zero region, the more it pulls down the average error.
+
+
+%
 % Thomas Goossens
 % May 2022
 
@@ -86,6 +99,21 @@ config{end}.degrees=[1:16]; % Polynomial degrees to try
 config{end}.rays=20000; % Number of rays per film pixel to trace
 config{end}.resolution=4000; % Number of pixels (horizontally)
 config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
+
+
+
+
+%%
+config{end+1}=[]
+config{end}.rtfname='wideangle200deg-offset0-circle-zemax';
+config{end}.distances = [3000 100]; % Distance of object as measured from lens front vertex (mm)
+config{end}.filmdistance_mm=2.010; % Distance of sensor from rear vertex
+config{end}.filmdiagonal_mm=2*1.23/100; 
+config{end}.degrees=[1:16]; % Polynomial degrees to try
+config{end}.rays=20000; % Number of rays per film pixel to trace
+config{end}.resolution=4000; % Number of pixels (horizontally)
+config{end}.zemaxfileESF='data/ESF/esf-wideangle200deg.mat'; % Where to find the ZEMAX file with ESF and LSF data
+
 
 
 

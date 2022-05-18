@@ -53,6 +53,22 @@ config{i}.cameraposition = [0 0.07 -0.3; 0.35 0.07 0.5];
 
 %%
 i=numel(config)+1;
+config{i}.name='wideangle200deg-offset0';
+config{i}.lensfile='wideangle200deg-automatic-zemax.json';
+config{i}.filmdistance_mm=2.004;
+config{i}.rtffile= 'wideangle200deg-offset0-circle-zemax-poly11-raytransfer.json';
+config{i}.sensordiagonal_mm=3;
+config{i}.filmresolution=4000;
+config{i}.raysperpixel=20000;
+config{i}.omni_aperturediameter_mm=2*0.62000000;
+config{i}.hline = 0.66; % proportion of filmresolution
+ %From/to % Camera position Offset because else the horizontal line goes
+ %through a bright window which obscures all the other details
+config{i}.cameraposition = [0 0.07 -0.3; 0.35 0.07 0.5];
+
+
+%%
+i=numel(config)+1;
 config{i}.name='petzval';
 config{i}.lensfile='petzval-zemax.json';
 config{i}.filmdistance_mm=45;
@@ -209,11 +225,7 @@ for ic=1:numel(config)
     c=config{ic};
     oiList={oiOmni{ic} oiRTF{ic} }
     % Export images to PNG files
-    for i=1:numel(oiList)
-        oi=oiList{i};
-        oiWindow(oi);
-    end
-    
+
     
     % Compare horizontal line and generate PNG file
     fig=figure; hold on
