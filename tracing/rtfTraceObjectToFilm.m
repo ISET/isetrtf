@@ -57,7 +57,7 @@ imagePlanePositions = nan(size(origins));
 
 % Add Vignetting: Ray should pass all vignetting circles
 % Vectorized calculation for speed.
-passnopass=rtf.polynomials.passnopass;
+passnopass=rtf.polynomials.raypass;
 
 
 % Rotate rays
