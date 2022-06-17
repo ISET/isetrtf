@@ -16,7 +16,7 @@ config{i}.sensordiagonal_mm=110;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
 config{i}.rtffile = 'dgauss28deg-zemax-poly6-raytransfer.json';
-config{i}.zemaxfile='./data/relativeillumination-pbrt/dgauss28deg-comparison.mat';
+config{i}.zemaxfile='./data/relativeillumination-pbrt/dgauss28deg-relativeillum-zemax.mat';
 
 
 %% Lens configurations
@@ -208,10 +208,10 @@ for p=1:numel(config)
     fig.Position=[680 811 180 155];  % Very small
     
     
-    rel=load(c.zemaxfile);
+    zemaxRelativeIllum=csvread(c.zemaxfile);
     
     hpbrt=plot(xaxis,relativeIllumPBRT,'color',[0.83 0 0 ],'linewidth',2)
-    hzemax=plot(rel.relativeIllum.zemax.x,rel.relativeIllum.zemax.y,'k-.','linewidth',2,'color','k')
+    hzemax=plot(zemaxRelativeIllum(:,1),zemaxRelativeIllum(:,2),'k-.','linewidth',2,'color','k')
 
     xlim([0 inf])
     xlabel('Image height (mm)')
