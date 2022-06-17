@@ -174,6 +174,8 @@ end
 load handel;sound(y,Fs);
 
 
+
+
 %% Make Plots of RMS Error 
 for i=1:numel(config)
     c=config{i};
@@ -219,8 +221,7 @@ for i=1:numel(config)
     
     
     plotESF(c.degrees,pixelsPBRT{i},c.distances,esfPBRT{i},esfZemax,addzemaxtolegend)
-    
-    
+     
     exportgraphics(gcf,['./fig/ESF/esf-' c.rtfname '.png'])
     
     

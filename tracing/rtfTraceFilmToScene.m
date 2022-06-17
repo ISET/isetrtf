@@ -1,4 +1,4 @@
-function [imagePlanePositions,imagePlaneDirectionsDirections] = rtfTraceObjectToFilm(rtf,origins,directions,imagePlaneDistFromRear)
+function [imagePlanePositions,imagePlaneDirectionsDirections] = rtfTraceFilmToScene(rtf,origins,directions,imagePlaneDistFromRear)
 % Ray transfer function for a collection of rays
 %
 % Syntax
