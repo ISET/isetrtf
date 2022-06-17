@@ -15,7 +15,7 @@ config{i}.filmdistance_mm=57.315;
 config{i}.sensordiagonal_mm=110;
 config{i}.pixelsamples=2000;
 config{i}.filmresolution=[900 1];
-config{i}.rtffile = 'dgauss28deg-zemax-poly6-raytransfer.json';
+config{i}.rtffile = 'dgauss28deg-zemax-poly6-raytransfer.json'; 
 config{i}.zemaxfile='./data/relativeillumination-pbrt/dgauss28deg-relativeillum-zemax.mat';
 
 
