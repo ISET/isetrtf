@@ -56,12 +56,12 @@ intersectionsOnInputPlane = origins + alpha.*directions;
 
 % Account for vignetting: Rays should pass all vignetting circles
 % Vectorized calculation for speed.
-passnopass=rtf.polynomials.raypass;
+raypass=rtf.polynomials.raypass;
 % Determine which rays pass and which dont
-if(isequal(passnopass.method,'minimalellipse'))
-    centers=[passnopass.centersX passnopass.centersY];
-    radii=[passnopass.radiiX passnopass.radiiY];
-    pass = doesRayPassEllipse(rotatedOrigins,rotatedDirections,passnopass.positions,radii,centers,passnopass.intersectPlaneDistance);
+if(isequal(raypass.method,'minimalellipse'))
+    centers=[raypass.centersX raypass.centersY];
+    radii=[raypass.radiiX raypass.radiiY];
+    pass = doesRayPassEllipse(rotatedOrigins,rotatedDirections,raypass.positions,radii,centers,raypass.intersectPlaneDistance);
 else
     % Make backwards compatible 
         pass = (doesRayPassCircles(intersectionsOnInputPlane,directions,rtf.circleRadii,rtf.circleSensitivities,rtf.circlePlaneZ));
