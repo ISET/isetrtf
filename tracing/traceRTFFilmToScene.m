@@ -45,7 +45,6 @@ function [rayArrivalPositions,rayArrivalDirections]= traceRTFFilmToScene(rtf,sen
 % z=0 at the sensor
 % Trace origin to the input plane of the RTF lens (linear extrapolation)
 inputplane_z = sensordistance_mm-rtf.planeoffsetinput;
-
 alpha = inputplane_z./directions(:,3);
 intersectionsOnInputPlane = origins + alpha.*directions;
 
@@ -110,8 +109,10 @@ parfor r=1:size(origins,1)
     arrivalPosOnOutputPlaneMeasuredFromRear(3)=arrivalPosOnOutSurface(3);
     
     
-    % For output surface
+    % For output surface: Distances are measured form the rear surface
     alpha = abs(objectPlaneDistanceFromRear_mm - arrivalPosOnOutputPlaneMeasuredFromRear(3)) ./ arrivalDirection(3);  % Distance to film
+    % Add sensordistance+rtfthickness to transform coordinate system such t
+    % that z=0 at the sensor. 
     rayArrivalPositions(r,:) = [0 0 sensordistance_mm+rtf.thickness]+arrivalPosOnOutputPlaneMeasuredFromRear + alpha*arrivalDirection;             % 
     rayArrivalDirections(r,:) = arrivalDirection;
     
