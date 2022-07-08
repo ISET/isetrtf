@@ -4,6 +4,18 @@ January 2022
 The ESF mat files were generated using the "Geometric Linepread/EdgeSpread" function in ZEMAX.
 This feature disregards the contribution of diffraction which is not modeled in the RTF.
 
-
-The mat files contain a matrix with five columns [position, LSF X, ESF X, LSF Y, ESF Y].
+The MAT file contains a cell array, each cell corresponds to to a different condition for which the ESF was calculated
+Each cell contains a matrix with five columns [position, LSF X, ESF X, LSF Y, ESF Y].
 We make a distinction between X and Y because, off-axis, the edge spread function is different for horizontal of vertical edges
+
+
+For the lenses in the paper, the ESF is calculated on axis at two distances from the lens.
+
+
+Lens    - distances
+dgauss - 1 m, 1.2 m
+inv. telephoteo - 3 m, 4.0 cm
+petzval - 3 m, 3.5 m
+Cooke - 0.3m , 0.5m
+Tessar - 1.3m - 2.0 m
+wide angle lens  - 3.0 m , 0.1 m
