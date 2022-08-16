@@ -55,7 +55,11 @@ intersectionsOnInputPlane = origins + alpha.*directions;
 
 % Account for vignetting: Rays should pass all vignetting circles
 % Vectorized calculation for speed.
-raypass=rtf.polynomials.raypass;
+if(isfield(rtf.polynomials,'raypass'))
+    raypass=rtf.polynomials.raypass;
+elseif(isfield(rtf.polynomials,'passnopass'))
+    raypass=rtf.polynomials.passnopass;
+end
 % Determine which rays pass and which dont
 if(isequal(raypass.method,'minimalellipse'))
     centers=[raypass.centersX raypass.centersY];
