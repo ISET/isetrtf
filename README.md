@@ -15,7 +15,7 @@ Repository for software to support the analyses in the paper on ray transfer fun
 ## Dependencies
 1) *ISET cam:* https://github.com/ISET/isetcam
 2) *ISET Lens:*  https://github.com/ISET/isetlens
-3) *ISET 3D:*  https://github.com/ISET/iset3d
+3) *ISET 3D:*  https://github.com/ISET/iset3d-v3
 4) *JSONio*: https://github.com/gllmflndn/JSONio
 
 ## Unpack ZIP files 
